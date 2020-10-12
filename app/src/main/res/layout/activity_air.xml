@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <com.example.tianqi.ui.custom.DiyToolbar
+        android:id="@+id/air_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:overScrollMode="never"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_below="@id/air_toolbar"
+        >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <RelativeLayout
+                android:background="@color/colorTextTheme"
+                android:id="@+id/rl_top"
+                android:layout_width="match_parent"
+                android:layout_height="126dp">
+                <TextView
+                    android:id="@+id/tv_air_number"
+                    android:textSize="59sp"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="@color/white"
+                    android:text="24"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/tv_air_lv"
+                    android:textSize="23sp"
+                    android:textColor="@color/white"
+                    android:text="优"
+                    android:layout_toRightOf="@+id/tv_air_number"
+                    android:layout_alignBaseline="@+id/tv_air_number"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+                <com.example.tianqi.ui.custom.RadAqiView
+                    android:id="@+id/mRadAqiView"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignBottom="@+id/tv_air_number"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginRight="23dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"/>
+
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/banner_container"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/rl_top"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginTop="8.5dp"
+                android:layout_below="@+id/banner_container"
+                android:id="@+id/air_parent"
+                android:layout_marginLeft="11.5dp"
+                android:layout_marginRight="11.5dp"
+                style="@style/main_layout_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:layout_marginTop="21dp"
+                    android:layout_marginLeft="12.5dp"
+                    android:id="@+id/tv_air_hint"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:text="空气指数"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_below="@+id/tv_air_hint"
+                    android:id="@+id/air_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginLeft="11.5dp"
+                android:layout_marginRight="11.5dp"
+                android:id="@+id/five_forecast"
+                style="@style/main_layout_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/air_parent">
+
+                <TextView
+                    android:id="@+id/five_title"
+                    style="@style/WeatherTextColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12.5dp"
+                    android:paddingTop="13.5dp"
+                    android:paddingBottom="7dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:text="五天空气质量" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/air_five_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:paddingTop="21dp"
+                    android:paddingBottom="20.5dp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_below="@+id/five_forecast"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:layout_marginTop="4.5dp"
+                    android:id="@+id/feed_container"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+
+
+
+</LinearLayout>

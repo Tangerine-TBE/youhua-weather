@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/city_name"
+            android:text="深圳"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <RelativeLayout
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView
+            android:layout_alignParentRight="true"
+            android:id="@+id/city_tem"
+            android:textSize="22sp"
+            android:layout_marginRight="21dp"
+            android:text="29-36"
+            android:textColor="@color/colorTextTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        
+        <ImageView
+            android:layout_below="@+id/city_tem"
+            android:id="@+id/wea_icon"
+            android:layout_alignTop="@+id/city_wea"
+            android:layout_alignBottom="@+id/city_wea"
+            android:layout_toLeftOf="@+id/city_wea"
+            android:layout_marginRight="5.5dp"
+            android:src="@mipmap/qing"
+            android:layout_width="27dp"
+            android:layout_height="27dp"/>
+
+        <TextView
+            android:layout_marginTop="1.5dp"
+            android:id="@+id/city_wea"
+            android:textColor="@color/black"
+            android:text="晴"
+            android:textSize="19sp"
+            android:layout_alignRight="@id/city_tem"
+            android:layout_below="@id/city_tem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

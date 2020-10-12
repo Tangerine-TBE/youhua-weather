@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:overScrollMode="never"
+    xmlns:sun="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_below="@+id/tl_title"
+        android:id="@+id/banner_container"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:background="@color/colorTransparent"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        style="@style/main_layout_margin"
+        android:layout_marginTop="6.5dp"
+        android:id="@+id/air_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:id="@+id/tv_airTeam"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="23/26"
+            android:textSize="30sp"
+
+         />
+
+        <ImageView
+            android:layout_below="@+id/tv_airTeam"
+            android:layout_alignLeft="@id/tv_airTeam"
+            android:id="@+id/mWeaIcon"
+            android:src="@mipmap/qing"
+            android:layout_width="31dp"
+            android:layout_height="31dp"/>
+
+        <TextView
+            android:id="@+id/tv_airWea"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="晴"
+            android:layout_marginLeft="6dp"
+            android:gravity="center"
+            android:layout_alignBottom="@+id/mWeaIcon"
+            android:layout_below="@+id/tv_airTeam"
+            android:layout_toRightOf="@+id/mWeaIcon"
+            android:textSize="20sp" />
+
+        <RelativeLayout
+            android:id="@+id/air_two"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+            <com.example.tianqi.ui.custom.SunriseView
+                android:id="@+id/mSun"
+                android:layout_centerInParent="true"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:layout_margin="20dp"
+                sun:svMainColor="@android:color/transparent"
+                sun:svPadding="10dp"
+                sun:svSunColor="#FFAA00"
+                sun:svSunRadius="9dp"
+                sun:svTextOffset="20dp"
+                sun:svTextSize="12sp"
+                sun:svTrackColor="@color/black"
+                sun:svTrackWidth="1dp" />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:overScrollMode="never"
+            android:id="@+id/rv_airDes"
+            android:layout_below="@+id/mWeaIcon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/main_layout_margin"
+        android:id="@+id/rl_huangLi"
+        android:layout_marginTop="7.5dp"
+        android:layout_below="@+id/air_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tv_huangli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11.5dp"
+                android:text="天气黄历"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginLeft="14.5dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_detail"
+                android:text="详情 >"
+                android:layout_marginRight="10dp"
+                android:layout_alignBaseline="@+id/tv_huangli"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+        <RelativeLayout
+            android:layout_below="@+id/tv_huangli"
+            android:layout_marginTop="14dp"
+            android:layout_marginLeft="14.5dp"
+            android:id="@+id/rl_suici"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/iv_nongli"
+                android:src="@mipmap/icon_nongli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="12dp"
+                android:id="@+id/tv_nongli"
+                android:layout_toRightOf="@+id/iv_nongli"
+                android:textColor="@color/black"
+                android:textSize="29sp"
+                android:text="八月初三"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_toRightOf="@+id/tv_nongli"
+                android:layout_alignBaseline="@+id/tv_nongli"
+                android:textColor="@color/black"
+                android:id="@+id/tv_suici"
+                android:textSize="10sp"
+                android:text="庚子年 乙酉月 甲子日"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+
+            android:id="@+id/rl_yi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_suici"
+            android:layout_marginLeft="14.5dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="14.5dp">
+
+            <ImageView
+                android:id="@+id/iv_yi"
+                android:src="@mipmap/icon_yi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:id="@+id/tv_yi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="7dp"
+                android:textSize="13sp"
+                android:layout_toRightOf="@id/iv_yi"
+                android:text="迁徙  入宅  治病  会友  祭祀  安乡  祈福 "
+                android:textColor="#03E1A4" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_yi"
+            android:layout_marginLeft="14.5dp"
+            android:layout_marginTop="17.5dp"
+            android:layout_marginRight="14.5dp"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:id="@+id/iv_ji"
+                android:src="@mipmap/icon_ji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:id="@+id/tv_ji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="7dp"
+                android:textSize="13sp"
+                android:layout_toRightOf="@id/iv_ji"
+                android:text="迁徙  入宅  治病  会友  祭祀  安乡  祈福 "
+                android:textColor="#FF0ABE" />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_below="@+id/rl_include"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_marginTop="4.5dp"
+            android:id="@+id/feed_container"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

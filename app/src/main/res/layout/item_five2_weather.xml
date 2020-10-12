@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="?selectableItemBackground"
+    android:paddingRight="27dp"
+    android:paddingLeft="27dp"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:paddingTop="11.5dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_five_week"
+            android:text="今天"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tv_five_wea"
+            android:text="晴"
+            android:layout_toRightOf="@id/tv_five_week"
+            android:layout_marginLeft="13dp"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <TextView
+            android:id="@+id/tv_five_aqi"
+            android:text="优"
+            android:textSize="14sp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <ImageView
+            android:id="@+id/iv_five_weaIcon"
+            android:src="@mipmap/qing"
+            android:layout_toLeftOf="@id/tv_five_team"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_width="11dp"
+            android:layout_height="11dp"/>
+
+        <TextView
+            android:id="@+id/tv_five_team"
+            android:text="28/20"
+            android:textSize="14sp"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/white"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_marginTop="11.5dp"
+            android:layout_below="@id/tv_five_team"
+            android:id="@+id/divider7"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#17FFFFFF" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <bitmap android:src="@mipmap/launch_bg"
+            android:gravity="fill"/>
+    </item>
+
+    <item android:bottom="120dp">
+        <bitmap android:src="@mipmap/launch_icon"
+            android:gravity="center"/>
+    </item>
+
+    <item android:top="130dp">
+        <bitmap android:src="@mipmap/launch_title"
+            android:gravity="center"/>
+    </item>
+
+</layer-list>
