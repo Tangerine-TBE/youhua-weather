@@ -181,7 +181,6 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //  MobclickAgent.onResume(this);
         BaseBackstage.setBackstage(this);
 
     }

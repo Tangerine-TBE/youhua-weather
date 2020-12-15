@@ -214,6 +214,8 @@
 
                 <!--15天-->
                 <LinearLayout
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:orientation="vertical"
                     android:visibility="gone"
                     android:id="@+id/five_forecast"

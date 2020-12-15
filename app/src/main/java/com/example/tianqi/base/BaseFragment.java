@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.feisukj.base.widget.loaddialog.LoadingDialog;
 import com.tiantian.tianqi.R;
 
 import butterknife.BindView;
@@ -27,6 +28,7 @@ public abstract class BaseFragment extends Fragment {
 
     @BindView(R.id.home_bg)
     ImageView mErrorVw;
+    private LoadingDialog mLoadingDialog;
 
     @OnClick(R.id.error_view)
     public void reload() {
@@ -44,10 +46,11 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_base,container,false);
         mFrameLayout= view.findViewById(R.id.base_container);
-
         loadView();
         mBind = ButterKnife.bind(this, view);
        // ChangeBgUtil.selectBg(mErrorVw,R.mipmap.loading_day,R.mipmap.home_night_bg);
+        mLoadingDialog = new LoadingDialog(getActivity());
+        mLoadingDialog.setCancelable(true);
         intView();
         intPresent();
         intLoad();
@@ -116,9 +119,24 @@ public abstract class BaseFragment extends Fragment {
         if (mBind != null) {
             mBind=null;
         }
-
+        if (mLoadingDialog != null)
+        { mLoadingDialog.dismiss();
+        }
         release();
     }
+
+    protected void showLoading() {
+        if (mLoadingDialog != null&!mLoadingDialog.isShowing()) {
+            mLoadingDialog.show();
+        }
+    }
+
+    protected void dismissLoading() {
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismiss();
+        }
+    }
+
 
     protected void release() {
 

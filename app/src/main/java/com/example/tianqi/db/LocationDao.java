@@ -58,7 +58,7 @@ public class LocationDao implements ILocationDao {
                 e.printStackTrace();
                 addSuccess = false;
             } finally {
-                if (db != null) {
+                if (db != null&&db.inTransaction()){
                     db.endTransaction();
                     db.close();
                 }
@@ -83,7 +83,7 @@ public class LocationDao implements ILocationDao {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (db != null) {
+                if (db != null&&db.inTransaction()){
                     db.endTransaction();
                     db.close();
                 }
@@ -120,7 +120,7 @@ public class LocationDao implements ILocationDao {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (db != null) {
+                if (db != null&&db.inTransaction()) {
                     db.endTransaction();
                     db.close();
                 }
@@ -151,7 +151,7 @@ public class LocationDao implements ILocationDao {
                 e.printStackTrace();
                 addSuccess = false;
             } finally {
-                if (db != null) {
+                if (db != null&&db.inTransaction()) {
                     db.endTransaction();
                     db.close();
                 }
@@ -162,10 +162,43 @@ public class LocationDao implements ILocationDao {
         }
     }
 
-    @Override
-    public void updateLocationCity(LocationBean locationBean) {
+
+
+    private void updateLastCity(String currentCity,LocationBean lastCity) {
         synchronized(mLock) {
             SQLiteDatabase db = null;
+            try {
+                db = mDbHelper.getWritableDatabase();
+                ContentValues values = new ContentValues();
+                values.put(Contents.CITY, lastCity.getCity());
+                values.put(Contents.LONGITUDE, lastCity.getLongitude());
+                values.put(Contents.LATITUDE, lastCity.getLatitude());
+                db.beginTransaction();
+                Cursor query = db.query(Contents.LOCATION_TABLE, null, null, null, null, null, null);
+                while (query.moveToNext()) {
+                    String city = query.getString(query.getColumnIndex(Contents.CITY));
+                    if (city.equals(currentCity)) {
+                        db.update(Contents.LOCATION_TABLE, values, Contents.CITY + "=?", new String[]{currentCity});
+                        db.setTransactionSuccessful();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (db != null&&db.inTransaction()){
+                    db.endTransaction();
+                    db.close();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void updateLocationCity(LocationBean locationBean,LocationBean lastCity) {
+        synchronized(mLock) {
+            SQLiteDatabase db = null;
+            boolean updateSuccess = false;
+            updateLastCity(locationBean.getCity(),lastCity);
             try {
                 db = mDbHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
@@ -181,15 +214,18 @@ public class LocationDao implements ILocationDao {
                     int id = query.getInt(0);
                     db.update(Contents.LOCATION_TABLE,values,  Contents.ID+"=?",new String[]{id+""});
                     db.setTransactionSuccessful();
-
                 }
+                updateSuccess=true;
             } catch (Exception e) {
                 e.printStackTrace();
-
+                updateSuccess=false;
             } finally {
-                if (db != null) {
+                if (db != null&&db.inTransaction()){
                     db.endTransaction();
                     db.close();
+                }
+                if (mILocationCallback != null) {
+                    mILocationCallback.updateLocationSuccess(updateSuccess);
                 }
             }
         }
@@ -217,7 +253,7 @@ public class LocationDao implements ILocationDao {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (db != null) {
+                if (db != null&&db.inTransaction()){
                     db.endTransaction();
                     db.close();
                 }

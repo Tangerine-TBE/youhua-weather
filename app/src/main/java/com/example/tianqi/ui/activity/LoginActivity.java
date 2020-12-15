@@ -270,6 +270,10 @@ public class LoginActivity extends BaseMainActivity implements ILoginCallback, I
         if (mThirdlyLoginPresent != null) {
             mThirdlyLoginPresent.unregisterCallback(this);
         }
+        if (mRxDialog != null) {
+            mRxDialog.dismiss();
+        }
+
 
     }
 

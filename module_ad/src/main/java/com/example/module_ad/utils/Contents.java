@@ -44,7 +44,7 @@ public class Contents {
     public static final String AD_INFO = "ad";
 
     //穿山甲
-    public static final String  CSJ_APPID= "5102724";
+    public static final String  CSJ_APPID= "5114727";
 
 
     //广告key

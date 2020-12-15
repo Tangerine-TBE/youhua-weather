@@ -130,12 +130,12 @@ public class CityPresentImpl implements ICityPresent, ILocationCallback {
     }
 
     @Override
-    public void updateLocationToSQLite(LocationBean bean) {
+    public void updateLocationToSQLite(LocationBean bean,LocationBean lastCity) {
         Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
                 if (mDao != null) {
-                    mDao.updateLocationCity(bean);
+                    mDao.updateLocationCity(bean,lastCity);
                 }
             }
         }).subscribeOn(Schedulers.io()).subscribe();
@@ -236,6 +236,19 @@ public class CityPresentImpl implements ICityPresent, ILocationCallback {
     @Override
     public void updateSuccess(boolean isSuccess) {
        // getCityData();
+    }
+
+    @Override
+    public void updateLocationSuccess(boolean isSuccess) {
+        getCityData();
+        BaseApplication.getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                for (ICityCallback callback : mCallbacks) {
+                    callback.updateState(isSuccess);
+                }
+            }
+        });
     }
 
 

@@ -39,6 +39,7 @@
     8.0后只有全屏不透明的activity才能设置方向锁定，所以，主题要透明且要设置竖直方向用这个theme-->
 
 
+
     <!--底部dialog Style-->
     <style name="BottomDialog" parent="@style/Base.V7.Theme.AppCompat.Light.Dialog">
         <item name="android:windowNoTitle">true</item>

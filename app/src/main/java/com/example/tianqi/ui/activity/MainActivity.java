@@ -58,6 +58,9 @@ public class MainActivity extends BaseMainActivity {
 
     @Override
     protected void setStatusBarColor() {
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
     }
 
     @Override
@@ -76,6 +79,7 @@ public class MainActivity extends BaseMainActivity {
         switchFragment(mHomeFragment);
         mExitPoPupWindow = new ExitPoPupWindow(this);
         intBgAnimation();
+
     }
 
 

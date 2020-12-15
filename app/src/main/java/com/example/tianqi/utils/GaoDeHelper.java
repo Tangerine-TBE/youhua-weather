@@ -18,8 +18,8 @@ import static com.amap.api.location.AMapLocationClientOption.AMapLocationMode.Hi
 public class GaoDeHelper {
 
     private  AMapLocationClient mLocationClient=null;
+    private static GaoDeHelper sInstance;
 
-    private static GaoDeHelper  sInstance;
     public static GaoDeHelper getInstance() {
         if (sInstance == null) {
             sInstance = new GaoDeHelper();
@@ -43,23 +43,30 @@ public class GaoDeHelper {
     }
 
     public void setListener(AMapLocationListener listener) {
-        if (listener != null) {
+        if (mLocationClient != null) {
             mLocationClient.setLocationListener(listener);
         }
     }
 
+
     public void startLocation() {
         if (mLocationClient != null) {
             mLocationClient.startLocation();
-
         }
+    }
+
+    public AMapLocationClient getLocationClient() {
+        if (mLocationClient != null) {
+            return mLocationClient;
+        }
+        return null;
     }
 
 
     public void stopLocation() {
         if (mLocationClient != null) {
             mLocationClient.stopLocation();
-           // mLocationClient.onDestroy();
+          //  mLocationClient.onDestroy();
         }
     }
 

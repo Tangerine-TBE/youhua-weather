@@ -5,5 +5,5 @@ import com.zaaach.citypicker.model.City;
 public interface InnerListener {
     void dismiss(int position, City data);
     void locate();
-    void locateFail();
+    void locateFail(int position, City data);
 }

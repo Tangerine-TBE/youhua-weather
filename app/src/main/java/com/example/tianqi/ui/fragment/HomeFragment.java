@@ -1,5 +1,11 @@
 package com.example.tianqi.ui.fragment;
 
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -69,7 +75,7 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
     private boolean mIsOne;
     private int mPosition;
     private GaoDeHelper mGaoDeHelper;
-
+    private MyReceiver mMyReceiver;
     //获取布局文件
     @Override
     public int getChildLayout() {
@@ -87,16 +93,30 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
         layoutParams.topMargin = mStatusBarHeight;
         mToolBar.setLayoutParams(layoutParams);
 
-
         mAdapter = new WeatherAdapter(getChildFragmentManager());
         mViewPager2.setAdapter(mAdapter);
         mViewPager2.setOffscreenPageLimit(8);
-
 
         mGaoDeHelper = GaoDeHelper.getInstance();
         mGaoDeHelper.setListener(this);
         mGaoDeHelper.startLocation();
 
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
+        mMyReceiver = new MyReceiver();
+        getActivity().registerReceiver(mMyReceiver,intentFilter);
+
+    }
+    private class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            LocationManager lm = (LocationManager) context.getSystemService(Service.LOCATION_SERVICE);
+            boolean isEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if (isEnabled) {
+                mGaoDeHelper.startLocation();
+            }
+
+        }
     }
 
 
@@ -115,16 +135,18 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
         mCityPresent = CityPresentImpl.getInstance();
         mCityPresent.registerCallback(this);
 
-        LocationBean locationBean = new LocationBean();
-        locationBean.setCity(SpUtils.getInstance().getString(Contents.CURRENT_CITY, "深圳"));
-        locationBean.setLongitude(Double.parseDouble(SpUtils.getInstance().getString(Contents.CURRENT_LONG, "113.959531")));
-        locationBean.setLatitude(Double.parseDouble(SpUtils.getInstance().getString(Contents.CURRENT_LAT, "22.544983")));
-        locationBean.setWea("CLEAR_NIGHT");
-        locationBean.setHighTeam(30);
-        locationBean.setLowTeam(25);
-        mCityList.add(locationBean);
-        mCityPresent.addDataToSQLite(locationBean);
-        mAdapter.setData(mCityList);
+        if (!SpUtils.getInstance().getBoolean(Contents.FIRST_ADD,false)) {
+            LocationBean locationBean = new LocationBean();
+            locationBean.setCity(SpUtils.getInstance().getString(Contents.CURRENT_CITY, "深圳"));
+            locationBean.setLongitude(Double.parseDouble(SpUtils.getInstance().getString(Contents.CURRENT_LONG, "113.959531")));
+            locationBean.setLatitude(Double.parseDouble(SpUtils.getInstance().getString(Contents.CURRENT_LAT, "22.544983")));
+            locationBean.setWea("CLEAR_NIGHT");
+            locationBean.setHighTeam(30);
+            locationBean.setLowTeam(25);
+            mCityList.add(locationBean);
+            mCityPresent.addDataToSQLite(locationBean);
+            mAdapter.setData(mCityList);
+        }
 
         if (mCityPresent != null) {
             mCityPresent.getCityData();
@@ -143,6 +165,7 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
 
             @Override
             public void onPageSelected(int position) {
+                if (position>=mCityList.size()) return;
                final Fragment currentFragment = mAdapter.getInstantFragment();
                 mPosition = position;
                 updateIndicator(position);
@@ -169,13 +192,7 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-        LogUtils.i(this, "LocationListener-------------------------->" + mCurrentCity + mLatitude + "-----------------" + mLongitude);
-        //定位失败那 没网拿缓存  or  拿SP中存的当前位置经纬度拿数据
-        if (aMapLocation.getLatitude() == 0.0 || aMapLocation.getLongitude() == 0.0) {
-
-        }
-        //定位成功 没网拿缓存  or  当前位置经纬度拿数据
-        else {
+        if (aMapLocation.getLatitude() != 0.0 || aMapLocation.getLongitude() != 0.0) {
             mCurrentCity = WeatherUtils.cityType(aMapLocation.getCity());
             mLongitude = aMapLocation.getLongitude();
             mLatitude = aMapLocation.getLatitude();
@@ -184,22 +201,34 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
                 RxToast.success("已自动定位到当前城市");
                 SpUtils.getInstance().putBoolean(Contents.FIRST_LOCATION, false).commit();
             }
-            SpUtils.getInstance().putString(Contents.CURRENT_CITY, mCurrentCity)
-                    .putString(Contents.CURRENT_LONG, mLongitude + "")
-                    .putString(Contents.CURRENT_LAT, mLatitude + "")
-                    .commit();
 
-            if (mCityPresent != null & !TextUtils.isEmpty(mCurrentCity)) {
-                LocationBean locationBean = new LocationBean();
-                locationBean.setCity(mCurrentCity);
-                locationBean.setLongitude(mLongitude);
-                locationBean.setLatitude(mLatitude);
-                locationBean.setWea("CLEAR_NIGHT");
-                locationBean.setHighTeam(35);
-                locationBean.setLowTeam(25);
-                mCityPresent.updateLocationToSQLite(locationBean);
+            if (!TextUtils.isEmpty(mCurrentCity)) {
+                String lastCity = SpUtils.getInstance().getString(Contents.CURRENT_CITY);
+                String lastLong = SpUtils.getInstance().getString(Contents.CURRENT_LONG);
+                String lastLat = SpUtils.getInstance().getString(Contents.CURRENT_LAT);
+                if (!TextUtils.isEmpty(lastCity) & !mCurrentCity.equals(lastCity) & mCityPresent != null) {
+                    //更新当前城市
+                    LocationBean locationBean = new LocationBean();
+                    locationBean.setCity(mCurrentCity);
+                    locationBean.setLongitude(mLongitude);
+                    locationBean.setLatitude(mLatitude);
+                    locationBean.setWea("CLEAR_NIGHT");
+                    locationBean.setHighTeam(35);
+                    locationBean.setLowTeam(25);
+                    //更新没定位前的城市
+                    LocationBean lastLocationBean = new LocationBean();
+                    lastLocationBean.setCity(lastCity);
+                    lastLocationBean.setLongitude(Double.parseDouble(lastLong));
+                    lastLocationBean.setLatitude(Double.parseDouble(lastLat));
+                    mIsOne = true;
+                    mCityPresent.updateLocationToSQLite(locationBean,lastLocationBean);
+                    SpUtils.getInstance().putString(Contents.CURRENT_CITY, mCurrentCity)
+                            .putString(Contents.CURRENT_LONG, mLongitude + "")
+                            .putString(Contents.CURRENT_LAT, mLatitude + "")
+                            .commit();
+                }
+
             }
-
         }
     }
 
@@ -208,6 +237,7 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
     @Override
     public void addState(boolean state) {
         //  RxToast.success(getActivity(), state ? "添加成功" : "添加失败").show();
+        SpUtils.getInstance().putBoolean(Contents.FIRST_ADD,true);
     }
 
 
@@ -233,7 +263,7 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
 
         if (mIsOne) {
             mAdapter.setData(locationBeanList);
-            mViewPager2.setCurrentItem(0, true);
+            mViewPager2.setCurrentItem(0);
             showIndicator(locationBeanList);
             updateIndicator(0);
             mCity.setText(mCityList.get(0).getCity());
@@ -242,7 +272,7 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
             if (locationBeanList.size() != 0) {
                 if (!mCityPresent.isScroll()) {
                     mAdapter.setData(locationBeanList);
-                    mViewPager2.setCurrentItem(mCityList.size(), true);
+                    mViewPager2.setCurrentItem(mCityList.size());
                     showIndicator(locationBeanList);
                     updateIndicator(mCityList.size() - 1);
                     mCity.setText(mCityList.get(mCityList.size() - 1).getCity());
@@ -280,7 +310,7 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
                         LogUtils.i(this, mCityList.size() + "等于现在最后一个为止删除---------------------->" + realPosition);
                     }
                     mAdapter.setData(locationBeanList);
-                    mViewPager2.setCurrentItem(realPosition, true);
+                    mViewPager2.setCurrentItem(realPosition);
                     showIndicator(locationBeanList);
                     updateIndicator(realPosition);
                     mCity.setText(mCityList.get(realPosition).getCity());
@@ -356,6 +386,14 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
             mCityPresent.unregisterCallback(this);
         }
 
+        if (mGaoDeHelper != null) {
+            mGaoDeHelper.stopLocation();
+        }
+        if (mMyReceiver != null) {
+            getActivity().unregisterReceiver(mMyReceiver);
+        }
+
+
         EventBus.getDefault().unregister(this);
     }
 
@@ -363,7 +401,7 @@ public class HomeFragment extends BaseFragment implements ICityCallback, AMapLoc
     @Override
     public void setToolbarBg(int x) {
         if (toolBar_bg != null & getActivity() != null) {
-            if (x > mStatusBarHeight) {
+            if (x > mStatusBarHeight+50) {
                 toolBar_bg.setBackground(getResources().getDrawable(ChangeBgUtil.selectIcon() ? R.color.day_bg : R.color.night_bg, null));
             } else {
                 toolBar_bg.setBackground(getResources().getDrawable(R.color.transparent, null));

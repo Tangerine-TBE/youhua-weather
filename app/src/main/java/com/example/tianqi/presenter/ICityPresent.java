@@ -21,7 +21,7 @@ public interface ICityPresent extends IBasePresent<ICityCallback> {
     void updateDataToSQLite(LocationBean bean);
 
     //更新本地城市
-    void updateLocationToSQLite(LocationBean bean);
+    void updateLocationToSQLite(LocationBean bean,LocationBean lastCity);
 
 
 

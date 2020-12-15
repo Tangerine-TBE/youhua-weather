@@ -5,19 +5,24 @@ import android.widget.FrameLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationListener;
 import com.example.module_ad.advertisement.SplashHelper;
 import com.example.module_ad.bean.AdBean;
-import com.example.module_ad.utils.LogUtils;
+import com.example.module_ad.utils.CommonUtil;
 import com.example.module_ad.utils.MyStatusBarUtil;
 import com.example.module_ad.utils.SpUtil;
 import com.example.tianqi.base.BaseApplication;
 import com.example.tianqi.base.BaseMainActivity;
+import com.example.tianqi.model.bean.LocationBean;
 import com.example.tianqi.presenter.Impl.AdPresentImpl;
+import com.example.tianqi.presenter.Impl.AddressPresentImpl;
 import com.example.tianqi.presenter.views.IAdCallback;
+import com.example.tianqi.presenter.views.IAddressCallback;
 import com.example.tianqi.utils.ColorUtil;
 import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.GaoDeHelper;
+import com.example.tianqi.utils.PresentManager;
 import com.example.tianqi.utils.SpUtils;
 import com.example.tianqi.utils.WeatherUtils;
 import com.tamsiree.rxkit.view.RxToast;
@@ -40,16 +45,16 @@ import butterknife.BindView;
  * @time 2020/9/11 18:00
  * @class describe
  */
-public class FirstLocationActivity extends BaseMainActivity implements OnPickListener, AMapLocationListener, IAdCallback {
+public class FirstLocationActivity extends BaseMainActivity implements OnPickListener, AMapLocationListener, IAdCallback, IAddressCallback {
 
     private GaoDeHelper mGaoDeHelper;
     private LocatedCity mLocatedCity;
-
     @BindView(R.id.fl_adContainer)
     FrameLayout  mSplashContainer;
     private SplashHelper mSplashHelper;
     private String mCity;
     private AdPresentImpl mAdPresent;
+    private AddressPresentImpl mAddressPresent;
 
     @Override
     protected void setStatusBarColor() {
@@ -64,11 +69,6 @@ public class FirstLocationActivity extends BaseMainActivity implements OnPickLis
     @Override
     protected void intView() {
         mSplashHelper = new SplashHelper(this, mSplashContainer, MainActivity.class);
-        mAdPresent = AdPresentImpl.getInstance();
-        mAdPresent.registerCallback(this);
-        mGaoDeHelper = GaoDeHelper.getInstance();
-        mGaoDeHelper.setListener(this);
-
         CityPicker.from(FirstLocationActivity.this)
                 .enableAnimation(false)
                 .setAnimationStyle(0)
@@ -77,41 +77,68 @@ public class FirstLocationActivity extends BaseMainActivity implements OnPickLis
     }
 
     @Override
+    protected void intPresent() {
+        mAdPresent = AdPresentImpl.getInstance();
+        mAdPresent.registerCallback(this);
+
+        mAddressPresent = PresentManager.getInstance().getAddressPresent();
+        mAddressPresent.registerCallback(this);
+
+        mGaoDeHelper = GaoDeHelper.getInstance();
+        mGaoDeHelper.setListener(this);
+        mGaoDeHelper.startLocation();
+    }
+
+    @Override
     public void onPick(int position, City data) {
+        selectCitySuccess();
+    }
+
+    private void  selectCitySuccess() {
         MyStatusBarUtil.setFullScreen(this,true);
         AdBean.DataBean data1 = SpUtil.getAdState();
         Map<String, String> adKey = SpUtil.getADKey();
         if (data1 != null || adKey != null) {
-            mSplashHelper.showAd();
+            if (mSplashHelper != null) {
+                mSplashHelper.showAd();
+            }
         }else {
             if (mAdPresent != null) {
                 mAdPresent.toRequestAd();
             }
         }
-        LogUtils.i(this,"onPick---------------------->"+data.getCode()+data.getName());
         SpUtils.getInstance().putBoolean(Contents.IS_FIRST, false).commit();
         SpUtils.getInstance().putBoolean(Contents.FIRST_LOCATION, true).commit();
         getSharedPreferences(Contents.NO_BACK_SP, MODE_PRIVATE).edit().putBoolean(Contents.NO_BACK, false).apply();
+        releaseLocation();
     }
+
 
     @Override
     public void onLocate() {
-        LogUtils.i(this,"onLocate---------------------->");
         mGaoDeHelper.startLocation();
 
     }
 
     @Override
     public void onCancel() {
-        LogUtils.i(this,"onCancel---------------------->");
         finish();
     }
 
     @Override
-    public void onFail() {
-        LogUtils.i(this,"onFail---------------------->");
-        RxToast.warning("请先定位当前城市");
+    public void onFail(int position, City data) {
+        //  RxToast.warning("请先定位当前城市");
+        if (!CommonUtil.isNetworkAvailable(this)){
+            RxToast.warning(getString(R.string.connect_error));
+        }else {
+            if (mAddressPresent != null) {
+                mCity = data.getName();
+                mAddressPresent.getLocationAddress(mCity);
+            }
+        }
+
     }
+
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
@@ -125,6 +152,7 @@ public class FirstLocationActivity extends BaseMainActivity implements OnPickLis
                     .putString(Contents.CURRENT_LONG, longitude + "")
                     .putString(Contents.CURRENT_LAT,latitude+"")
                     .commit();
+
         } else {
             BaseApplication.getHandler().postDelayed(new Runnable() {
                 @Override
@@ -139,13 +167,23 @@ public class FirstLocationActivity extends BaseMainActivity implements OnPickLis
 
     @Override
     protected void release() {
-        if (mGaoDeHelper != null) {
-            mGaoDeHelper.stopLocation();
-            mGaoDeHelper=null;
-        }
 
         if (mSplashHelper != null) {
             mSplashHelper=null;
+        }
+
+        if (mAddressPresent != null) {
+            mAddressPresent.unregisterCallback(this);
+        }
+    }
+
+    private void releaseLocation() {
+        if (mGaoDeHelper != null) {
+            mGaoDeHelper.stopLocation();
+            AMapLocationClient locationClient = mGaoDeHelper.getLocationClient();
+            if (locationClient!=null) {
+                locationClient.unRegisterLocationListener(this);
+            }
         }
     }
 
@@ -156,11 +194,33 @@ public class FirstLocationActivity extends BaseMainActivity implements OnPickLis
             String ad = JSON.toJSONString(data);
             BaseApplication.getAppContext().getSharedPreferences(Contents.AD_INFO_SP, Context.MODE_PRIVATE).edit().putString(Contents.AD_INFO, ad).apply();
             mSplashHelper.showAd();
+
         }
     }
 
+
+    @Override
+    public void onLoadAddressSuccess(LocationBean addressBean) {
+        selectCitySuccess();
+        SpUtils.getInstance().putString(Contents.CURRENT_CITY, mCity)
+                .putString(Contents.CURRENT_LONG, addressBean.getLongitude() + "")
+                .putString(Contents.CURRENT_LAT,addressBean.getLatitude()+"")
+                .commit();
+    }
+
+
     @Override
     public void onLoadAdMsgError() {
+
+    }
+
+    @Override
+    public void onLoading() {
+
+    }
+
+    @Override
+    public void onError() {
 
     }
 }

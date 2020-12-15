@@ -38,6 +38,7 @@ import com.zaaach.citypicker.model.City;
 import com.zaaach.citypicker.model.HotCity;
 import com.zaaach.citypicker.model.LocateState;
 import com.zaaach.citypicker.model.LocatedCity;
+import com.zaaach.citypicker.util.CommonUtil;
 import com.zaaach.citypicker.util.ScreenUtil;
 import com.zaaach.citypicker.view.SideIndexBar;
 
@@ -334,9 +335,12 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
     }
 
     @Override
-    public void locateFail() {
+    public void locateFail(int position, City data) {
+        if (CommonUtil.isNetworkAvailable(getActivity())) {
+            dismiss();
+        }
         if (mOnPickListener != null){
-            mOnPickListener.onFail();
+            mOnPickListener.onFail(position, data);
         }
     }
 

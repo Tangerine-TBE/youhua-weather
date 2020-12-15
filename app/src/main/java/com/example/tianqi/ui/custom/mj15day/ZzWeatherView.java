@@ -86,6 +86,7 @@ public class ZzWeatherView extends HorizontalScrollView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        setLayerType(View.LAYER_TYPE_HARDWARE, null);
         if (getChildCount() > 0) {
             ViewGroup root = (ViewGroup) getChildAt(0);
 
@@ -102,7 +103,7 @@ public class ZzWeatherView extends HorizontalScrollView {
 
                 TemperatureView tv =c.findViewById(R.id.ttv_day);
 
-                invalidate();
+                postInvalidate();
                 tv.setRadius(10);
 
                 int x0 = (int) (dX + tv.getxPointDay());
@@ -393,7 +394,7 @@ public class ZzWeatherView extends HorizontalScrollView {
             }
 
         }
-        
+
     }
 
 
@@ -490,6 +491,9 @@ public class ZzWeatherView extends HorizontalScrollView {
                     }
                 }
             });
+            if (finalI == 0) {
+                mItemView.setBg(true);
+            }
 
            mItemView.setOnTouchListener(new OnTouchListener() {
                @Override
@@ -518,6 +522,7 @@ public class ZzWeatherView extends HorizontalScrollView {
             mLlRoot.addView(mItemView);
         }
         addView(mLlRoot);
+
     }
 
     public void setColumnNumber(int num) throws Exception {

@@ -20,6 +20,7 @@ import com.example.tianqi.ui.activity.BackActivity;
 import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.SpUtil;
 import com.tiantian.tianqi.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -102,8 +103,7 @@ public abstract class BaseMainActivity extends FragmentActivity {
     }
 
     public boolean isAppOnForeground() {
-        // Returns a list of application processes that are running on the
-        // device
+
         ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
         String packageName = getApplicationContext().getPackageName();
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
@@ -123,13 +123,13 @@ public abstract class BaseMainActivity extends FragmentActivity {
     @Override
     protected void onPause() {
         super.onPause();
-    //    MobclickAgent.onPause(this);
+       MobclickAgent.onPause(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-      //  MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
         SharedPreferences no_back_sp = BaseApplication.getAppContext().getSharedPreferences(Contents.NO_BACK_SP, MODE_PRIVATE);
         boolean no_back = no_back_sp.getBoolean(Contents.NO_BACK, false);
         if (no_back) {

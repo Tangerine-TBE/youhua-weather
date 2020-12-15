@@ -15,7 +15,6 @@ import com.example.tianqi.base.BaseMainActivity;
 import com.example.tianqi.model.bean.DayWeatherBean;
 import com.example.tianqi.model.bean.DescribeBean;
 import com.example.tianqi.model.bean.HourWeatherBean;
-import com.example.tianqi.model.bean.LifeBean;
 import com.example.tianqi.model.bean.LocationBean;
 import com.example.tianqi.model.bean.MjLifeBean;
 import com.example.tianqi.model.bean.RainWeatherBean;
@@ -31,6 +30,7 @@ import com.example.tianqi.presenter.views.IWeatherCacheCallback;
 import com.example.tianqi.presenter.views.IWeatherCallback;
 import com.example.tianqi.ui.adapter.CityListAdapter;
 import com.example.tianqi.ui.custom.DiyToolbar;
+import com.example.tianqi.ui.custom.mj15day.WeatherModel;
 import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.PresentManager;
 import com.example.tianqi.utils.RecyclerViewItemDistanceUtil;
@@ -178,7 +178,7 @@ public class CityManageActivity extends BaseMainActivity implements OnPickListen
 
     @Override
     public void onPick(int position, City data) {
-        if (mCityList.size() < 10) {
+        if (mCityList!=null&&mCityList.size() < 10) {
             if (mAddressPresent != null) {
                 mCity = data.getName();
                 mAddressPresent.getLocationAddress(mCity);
@@ -206,9 +206,10 @@ public class CityManageActivity extends BaseMainActivity implements OnPickListen
     }
 
     @Override
-    public void onFail() {
+    public void onFail(int position, City data) {
 
     }
+
 
     @Override
     protected void onResume() {
@@ -301,7 +302,7 @@ public class CityManageActivity extends BaseMainActivity implements OnPickListen
     }
 
     @Override
-    public void onLoadDayWeatherData(DayWeatherBean.ResultBean resultBean, List<LifeBean> LifeBeans) {
+    public void onLoadDayWeatherData(DayWeatherBean.ResultBean resultBean, List<WeatherModel> LifeBeans) {
         if (resultBean != null) {
             DayWeatherBean.ResultBean.DailyBean daily = resultBean.getDaily();
             DayWeatherBean.ResultBean.DailyBean.SkyconBean skyconBean = daily.getSkycon().get(0);
@@ -313,6 +314,7 @@ public class CityManageActivity extends BaseMainActivity implements OnPickListen
             // LogUtils.i(this,"----------------->"+value);
             if (mAddress != null) {
                 mCityPresent.addDataToSQLite(new LocationBean(mCity, mAddress.getLongitude(), mAddress.getLatitude(), value, max, min));
+                finish();
             }
 
 

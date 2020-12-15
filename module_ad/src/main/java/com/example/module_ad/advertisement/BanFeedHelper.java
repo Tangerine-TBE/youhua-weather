@@ -13,8 +13,10 @@ import com.example.module_ad.utils.SpUtil;
 
 public class BanFeedHelper {
 
-    private boolean mAddToutiaoAdError = false;
-    private boolean mAddTengxunAdError = false;
+    private boolean mAddToutiaoAdBanError = false;
+    private boolean mAddTengxunAdBanError = false;
+    private boolean mAddToutiaoAdFeedError = false;
+    private boolean mAddTengxunAdFeedError = false;
     private Activity mActivity;
     private TXBannerAd mTxBannerAd;
     private TXFeedAd mTxFeedAd;
@@ -129,10 +131,10 @@ public class BanFeedHelper {
         mTtBannerAd.setOnShowError(new IShowAdCallback() {
             @Override
             public void onShowError() {
-                if (!mAddToutiaoAdError) {
+                if (!mAddToutiaoAdBanError) {
                     showTXBannerAd();
                 }
-                mAddToutiaoAdError = true;
+                mAddToutiaoAdBanError = true;
             }
         });
 
@@ -145,10 +147,10 @@ public class BanFeedHelper {
         mTxBannerAd.setOnShowError(new IShowAdCallback() {
             @Override
             public void onShowError() {
-                if (!mAddTengxunAdError) {
+                if (!mAddTengxunAdBanError) {
                     showTTBannerAd();
                 }
-                mAddTengxunAdError = true;
+                mAddTengxunAdBanError = true;
             }
         });
     }
@@ -160,10 +162,10 @@ public class BanFeedHelper {
         mTtFeedAd.setOnShowError(new IShowAdCallback() {
             @Override
             public void onShowError() {
-                if (!mAddToutiaoAdError) {
+                if (!mAddToutiaoAdFeedError) {
                     showTXFeedAd();
                 }
-                mAddToutiaoAdError = true;
+                mAddToutiaoAdFeedError = true;
             }
         });
     }
@@ -174,10 +176,10 @@ public class BanFeedHelper {
         mTxFeedAd.setOnShowError(new IShowAdCallback() {
             @Override
             public void onShowError() {
-                if (!mAddTengxunAdError) {
+                if (!mAddTengxunAdFeedError) {
                     showTTFeedAd();
                 }
-                mAddTengxunAdError = true;
+                mAddTengxunAdFeedError = true;
             }
         });
     }

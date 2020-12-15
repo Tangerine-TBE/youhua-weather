@@ -25,7 +25,6 @@
     <!--导航栏颜色-->
 
     <!--权限申请页字体颜色-->
-    <color name="SettingPager_bg">#F3F3F3</color>
 
     <!--首页滑动bar的颜色-->
     <color name="day_bg">#5B97AC</color>
@@ -44,14 +43,6 @@
     <color name="air_f">#880B20 </color>
 
     <!--计算器-->
-    <color name="leading_title">#444444</color>
-
-    <color name="gray">#BBBBBB</color>
-
-
-    <color name="blue">#0099FF</color>
-
-    <color name="green">#009933</color>
 
 
     <!-- ripple 默认效果值 -->

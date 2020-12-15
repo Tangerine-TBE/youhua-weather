@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <!-- 访问网络，网络定位需要上网 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!--android 9.0上使用前台服务，需要添加权限-->
@@ -65,9 +66,9 @@
         <activity android:name="com.example.tianqi.base.BaseMainActivity" />
         <activity
             android:name="com.example.tianqi.ui.activity.MainActivity"
+             android:hardwareAccelerated="true"
             android:launchMode="singleTask" />
         <activity android:name="com.example.tianqi.ui.activity.AirActivity" android:launchMode="singleTop"/>
-        <activity android:name="com.example.tianqi.ui.activity.AirDescribeActivity"/>
         <activity android:name="com.example.tianqi.ui.activity.Day15Activity" android:launchMode="singleTop"/>
         <activity android:name="com.example.tianqi.ui.activity.FirstLocationActivity"  android:launchMode="singleTop" android:theme="@style/DefaultCityPickerTheme" />
         <activity android:name="com.example.tianqi.ui.activity.HuangLiActivity"/>
@@ -177,7 +178,7 @@
 
         <!--友盟-->
 
-        <meta-data android:value="5f508e0c9be20132c1a15b28" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="5f8d051ba88dfc3eb93ab173" android:name="UMENG_APPKEY"/>
         <meta-data android:value="${CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
 
 

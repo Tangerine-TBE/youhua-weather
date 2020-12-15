@@ -19,6 +19,7 @@ import com.example.module_tool.base.BaseActivity
 import com.example.module_tool.utils.DeviceUtils
 import com.example.module_tool.utils.getCloselyPreSize
 import kotlinx.android.synthetic.main.activity_mirror_cjy.*
+import java.lang.Exception
 
 class MirrorActivity : BaseActivity(){
     private val cameraManager: CameraManager by lazy { getSystemService(Context.CAMERA_SERVICE) as CameraManager }
@@ -105,6 +106,8 @@ class MirrorActivity : BaseActivity(){
             }
 
             override fun onConfigured(session: CameraCaptureSession) {
+                try {
+
                 this@MirrorActivity.session=session
                 captureRequestBuilder=cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
                 captureRequestBuilder?.addTarget(surface)
@@ -120,7 +123,11 @@ class MirrorActivity : BaseActivity(){
 //                        seekBar.progress=progress
 //                    }
                 }
+                }catch (e:Exception){
+                    finish()
+                }
             }
+
 
         }
 

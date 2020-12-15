@@ -41,6 +41,7 @@ public class WeatherCacheDao implements IWeatherCacheDao{
             try {
                 if (mList.contains(weatherCacheBean.getCity())) {
                     updateWeaCache(weatherCacheBean);
+
                 } else {
                     db = mDbHelper.getWritableDatabase();
                     ContentValues values = new ContentValues();

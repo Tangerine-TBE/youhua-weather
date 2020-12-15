@@ -13,6 +13,7 @@ import com.example.tianqi.model.bean.RealtimeWeatherBean;
 import com.example.tianqi.model.bean.WarningBean;
 import com.example.tianqi.presenter.IWeatherPresent;
 import com.example.tianqi.presenter.views.IWeatherCallback;
+import com.example.tianqi.ui.custom.mj15day.WeatherModel;
 import com.example.tianqi.utils.DateUtil;
 import com.example.tianqi.utils.WeatherUtils;
 import com.tiantian.tianqi.R;
@@ -35,6 +36,7 @@ public class WeatherPresentImpl implements IWeatherPresent {
     private final DescribeBean mDescribeBean;
     List<DescribeBean.Des> mDesList = new ArrayList<>();
     List<LifeBean> mLifeBeans = new ArrayList<>();
+    List<WeatherModel> m15DayWeatherList = new ArrayList<>();
     private final WeatherData mWeatherData;
     private double mLongitude;
     private double mLatitude;
@@ -74,6 +76,40 @@ public class WeatherPresentImpl implements IWeatherPresent {
 
         return mLifeBeans;
     }
+
+
+    private List<WeatherModel>  get15Day(DayWeatherBean.ResultBean resultBean) {
+     /*   DayWeatherBean.ResultBean.DailyBean daily = resultBean.getDaily();
+        String week = null;
+        for (int i = 0; i < daily.getSkycon().size(); i++) {
+            DayWeatherBean.ResultBean.DailyBean.AstroBean astroBean = daily.getAstro().get(i);
+            String date = astroBean.getDate().substring(0, 10);
+            DayWeatherBean.ResultBean.DailyBean.SkyconBean skyconBean = daily.getSkycon().get(i);
+            DayWeatherBean.ResultBean.DailyBean.TemperatureBean temperatureData = daily.getTemperature().get(i);
+            DayWeatherBean.ResultBean.DailyBean.AirQualityBean.AqiBean aqiBean = daily.getAir_quality().getAqi().get(i);
+
+            if (i == 0) {
+                week = "今天";
+            } else if (i == 1) {
+                week = "明天";
+            } else {
+                week = DateUtil.getWeek(date);
+            }
+            WeatherModel weather15 = new WeatherModel();
+            weather15.setDate(DateUtil.StrToData(date));
+            weather15.setWeek(week);
+            weather15.setDayWeather(WeatherUtils.weatherPhenomena(skyconBean.getValue()));
+            weather15.setDayTemp(((int) temperatureData.getMax()));
+            weather15.setNightTemp((int) temperatureData.getMin());
+            weather15.setDayPic(WeatherUtils.weatherIcon(skyconBean.getValue()));
+            weather15.setNightPic(WeatherUtils.weatherIcon(skyconBean.getValue()));
+            weather15.setNightWeather(WeatherUtils.weatherPhenomena(skyconBean.getValue()));
+            weather15.setAirLevel(WeatherUtils.aqiState((int) aqiBean.getAvg().getChn()));
+            m15DayWeatherList.add(weather15);
+        }*/
+        return m15DayWeatherList;
+    }
+
 
     //封装天气情况描述
     private DescribeBean getInfo(RealtimeWeatherBean.ResultBean resultBean) {
@@ -267,10 +303,14 @@ public class WeatherPresentImpl implements IWeatherPresent {
                         if (isFresh) {
                             handlerRefreshSuccess();
                             RealtimeWeatherBean.ResultBean result = body.getResult();
-                            handlerSuccess(getInfo(result));
+                            if (result != null) {
+                                handlerSuccess(getInfo(result));
+                            }
                         } else {
                             RealtimeWeatherBean.ResultBean result = body.getResult();
-                            handlerSuccess(getInfo(result));
+                            if (result != null) {
+                                handlerSuccess(getInfo(result));
+                            }
                         }
 
                     }
@@ -302,11 +342,11 @@ public class WeatherPresentImpl implements IWeatherPresent {
                         if (isFresh) {
                             handlerRefreshSuccess();
                             DayWeatherBean.ResultBean result = dayWeatherBean.getResult();
-                            handlerDaySuccess(result,getLife(result));
+                            handlerDaySuccess(result,get15Day(result));
 
                         } else {
                             DayWeatherBean.ResultBean result = dayWeatherBean.getResult();
-                            handlerDaySuccess(result,getLife(result));
+                            handlerDaySuccess(result,get15Day(result));
                         }
 
                     }
@@ -344,10 +384,10 @@ public class WeatherPresentImpl implements IWeatherPresent {
     }
 
 
-    private void handlerDaySuccess(DayWeatherBean.ResultBean result,List<LifeBean> mLifeBeans) {
+    private void handlerDaySuccess(DayWeatherBean.ResultBean result,List<WeatherModel> list) {
 
         for (IWeatherCallback callback : mCallbacks) {
-            callback.onLoadDayWeatherData(result,mLifeBeans);
+            callback.onLoadDayWeatherData(result,list);
         }
     }
 

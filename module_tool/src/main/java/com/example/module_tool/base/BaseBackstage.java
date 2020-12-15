@@ -18,6 +18,7 @@ import java.util.List;
 public class BaseBackstage {
 
     private static boolean isShow=false;
+    public static boolean isExit=false;
     private static CountDownTimer mStart;
     private static int mShowTime=1000;
 
@@ -48,8 +49,6 @@ public class BaseBackstage {
             AdBean.DataBean.StartPageBean.SpreadScreenBean spread_screen = adState.getStart_page().getSpread_screen();
             int times = spread_screen.getTimes();
             mShowTime=times*1000;
-
-
             if (!isAppOnForeground(activity)) {
                 mStart = new CountDownTimer(mShowTime, 1000) {
                     @Override
@@ -69,17 +68,19 @@ public class BaseBackstage {
     public static void setBackstage(Activity context) {
         SharedPreferences no_back_sp = BaseApplication.getApplication().getSharedPreferences(Contents.NO_BACK_SP, context.MODE_PRIVATE);
         boolean no_back = no_back_sp.getBoolean(Contents.NO_BACK, false);
-        if (no_back) {
-        }else {
+        if (!no_back) {
             if (CommonUtil.isNetworkAvailable(context)) {
                 AdBean.DataBean adState = SpUtil.getAdState();
                 if (adState != null ) {
                     if (adState.getStart_page()!=null) {
                         if (adState.getStart_page().getSpread_screen().isStatus()) {
                             if (isShow) {
-                                Intent intent = new Intent(context, BackActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                context.startActivity(intent);
+                                if (!isExit) {
+                                    Intent intent = new Intent(context, BackActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    context.startActivity(intent);
+                                }
+
                             }
                             if (mStart != null) {
                                 mStart.cancel();
@@ -87,10 +88,11 @@ public class BaseBackstage {
                             isShow=false;
                         }
                     }
-                    // TODO: 2020/7/17
-
+                    isExit=false;
+                    
                 }
             }
         }
+
     }
 }

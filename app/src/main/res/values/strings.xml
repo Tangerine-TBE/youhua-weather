@@ -1,7 +1,4 @@
 <resources>
-    <string name="app_name">中央天气预报</string>
-
-    <string name="cp_locating">正在定位…</string>
 
     <string name="user_agreement">请您在使用前仔细阅读《用户服务协议》和《隐私政策》。开始使用代表您已阅读并同意</string>
 
@@ -290,8 +287,6 @@
     <!--计算器-->
 
     <!--角度弧度-->
-    <string name="left">(</string>
-    <string name="right">)</string>
     <!--面积单位-->
 
 
@@ -327,11 +322,6 @@
     <!-- 亲戚 -->
 
 
-    <string name="refundDetailMsg">%s年还款明细</string>
-    <string name="interest">每个月还“本金+利息”之和的固定还款金额。此方式较适宜有正常开支计划、长期平稳收入的家庭</string>
-    <string name="capital">每个月还款本金不变，利息另算，由于本金减少，利息逐月减少。因此每月还款额逐月递减。此方式前期还款额度较大，所以比较时候在前期还款能力强的贷款人</string>
-    <string name="question">等额本息和等额本金是什么？</string>
-    <string name="down">每月递减%s</string>
     <string name="connect_error">网络连接失败，请检查网络连接</string>
 
 </resources>

@@ -18,5 +18,6 @@ public interface ILocationCallback  {
 
     void updateSuccess(boolean isSuccess);
 
+    void updateLocationSuccess(boolean isSuccess);
 
 }

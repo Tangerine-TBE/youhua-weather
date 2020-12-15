@@ -51,14 +51,6 @@ public class Contents {
     public static final String AD_INFO_SP = "ad_info";
     public static final String AD_INFO = "ad";
 
-    //穿山甲
-    public static final String  CSJ_APPID= "5091408";
-
-   // public static final String CSJ_APPID = "5044191";
-    public static final String CSJ_SPLASH = "887345812";
-    public static final String CSJ_BANNER = "945308592";
-    public static final String CSJ_FEED = "945309048";
-
     //广告key
     //TT
     public static final String KT_OUTIAO_APPKEY = "kTouTiaoAppKey";
@@ -88,7 +80,7 @@ public class Contents {
     public static final String FIRST_LOCATION = "first_location";
     public static final String FIRST_LAUNCH = "firstOne";
     public static final String IS_FIRST = "one";
-
+    public static final String FIRST_ADD= "first_add";
 
     //存在当前位置信息
     public static final String CURRENT_CITY_SP = "currentCity";

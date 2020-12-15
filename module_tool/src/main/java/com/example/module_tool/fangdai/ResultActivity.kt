@@ -27,13 +27,12 @@ class ResultActivity : BaseActivity() {
 
         showLoading()
         result_toolbar.setTitle("房贷清单")
-        val bean = intent?.extras!!["bean"]
+       intent?.extras?.let {
+        val bean =it["bean"]
         if (bean != null) {
             bean as BaseBean
-
             //开始计算
             calculateLoanInfo(bean)
-
             monthPayTv.text = refundDesc.monthPay
             refundSumTv.text = refundDesc.sumPay
             refundInterestTv.text = refundDesc.interestPay
@@ -76,6 +75,8 @@ class ResultActivity : BaseActivity() {
                 payRecycler.visibility = if (payRecycler.visibility == View.VISIBLE) View.GONE else View.VISIBLE
             }
         }
+
+       }
     }
 
     private fun calculateLoanInfo(info: BaseBean) {

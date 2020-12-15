@@ -74,7 +74,7 @@ public interface Api {
         Call<WeiXinBean> toWxAccredit(@QueryMap Map<String,String> params);
 
 
-        @GET("anTuoAoWeather")
+        @GET("youhuaWeather")
         Observable<AdBean> getAdMessage(@QueryMap  Map<String,String> params);
 
         @GET("huangli/date")

@@ -115,7 +115,7 @@ public class CityPicker {
         FragmentTransaction ft = mFragmentManager.get().beginTransaction();
         final Fragment prev = mFragmentManager.get().findFragmentByTag(TAG);
         if (prev != null){
-            ft.remove(prev).commit();
+            ft.remove(prev).commitAllowingStateLoss();
             ft = mFragmentManager.get().beginTransaction();
         }
         ft.addToBackStack(null);

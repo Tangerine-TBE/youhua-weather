@@ -29,7 +29,6 @@ import com.example.tianqi.model.bean.DayWeatherBean;
 import com.example.tianqi.model.bean.DescribeBean;
 import com.example.tianqi.model.bean.HourWeatherBean;
 import com.example.tianqi.model.bean.HuangLiBean;
-import com.example.tianqi.model.bean.LifeBean;
 import com.example.tianqi.model.bean.LocationBean;
 import com.example.tianqi.model.bean.MjDesBean;
 import com.example.tianqi.model.bean.MjLifeBean;
@@ -64,10 +63,13 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.tamsiree.rxkit.view.RxToast;
 import com.tiantian.tianqi.R;
+
 import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import butterknife.BindView;
 
 /**
@@ -164,6 +166,7 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     //添加布局文件
     @Override
     public int getChildLayout() {
+
         return R.layout.fragment_weather;
     }
 
@@ -175,7 +178,7 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     //初始化
     @Override
     protected void intView() {
-
+        setViewState(ViewState.SUCCESS);
         init15DayWeather();
         //设置刷新头
         MaterialHeader classicsHeader = new MaterialHeader(getContext());
@@ -280,7 +283,7 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
             @Override
             public void onClick(View view) {
                 if (mHuangLiData != null) {
-                    startActivity(new Intent(getActivity(), HuangLiActivity.class).putExtra(Contents.HUANGLI_DATA, JSON.toJSONString(mHuangLiData)));
+                    startActivity(new Intent(getActivity(), HuangLiActivity.class).putExtra(Contents.HL_DATA, JSON.toJSONString(mHuangLiData)));
                 }
             }
         });
@@ -397,32 +400,35 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
                 }
             }
         }
-        LogUtils.i(this, "onLoadCacheSuccess-------缓存----------->");
+        LogUtils.i(this, mPos+"onLoadCacheSuccess-------缓存----------->"+cacheBeanList.size());
         setViewState(ViewState.SUCCESS);
-        if (mPos == cacheBeanList.size()) {
+        if (mPos >=cacheBeanList.size()) {
             return;
         }
         if (mPos >= 0) {
             WeatherCacheBean weatherCacheBean = cacheBeanList.get(mPos);
             String describe = weatherCacheBean.getFiveWea();
             DayWeatherBean.ResultBean resultBean = JSON.parseObject(describe, DayWeatherBean.ResultBean.class);
+            if (resultBean != null) {
+                String value1 = resultBean.getDaily().getSkycon().get(0).getValue();
+                String weatherPhenomena = WeatherUtils.weatherPhenomena(value1);
+                iv_wea_icon.setImageResource(WeatherUtils.weatherIcon(value1));
+                //实时天气
+                mWea.setText(weatherPhenomena);
 
-            String value1 = resultBean.getDaily().getSkycon().get(0).getValue();
-            String weatherPhenomena = WeatherUtils.weatherPhenomena(value1);
-            iv_wea_icon.setImageResource(WeatherUtils.weatherIcon(value1));
-            //实时天气
-            mWea.setText(weatherPhenomena);
-
-            //空气质量
-            int chn = (int) resultBean.getDaily().getAir_quality().getAqi().get(0).getAvg().getChn();
-            air_title.setText(WeatherUtils.aqiType(chn));
-
+                //空气质量
+                int chn = (int) resultBean.getDaily().getAir_quality().getAqi().get(0).getAvg().getChn();
+                air_title.setText(WeatherUtils.aqiType(chn));
+            }
             //天气描述
             String cacheBeanDescribe = weatherCacheBean.getDescribe();
             DescribeBean describeBean = JSON.parseObject(cacheBeanDescribe, DescribeBean.class);
-            List<DescribeBean.Des> des = describeBean.getDes();
-            mDescribes = describeBean;
-            setDescribeUi(des);
+            if (describeBean != null) {
+                List<DescribeBean.Des> des = describeBean.getDes();
+                mDescribes = describeBean;
+                setDescribeUi(des);
+            }
+
 
             //五天天气
             if (resultBean != null) {
@@ -474,20 +480,56 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
 
     //天级天气回调
     @Override
-    public void onLoadDayWeatherData(DayWeatherBean.ResultBean resultBean, List<LifeBean> LifeBeans) {
+    public void onLoadDayWeatherData(DayWeatherBean.ResultBean resultBean, List<WeatherModel> day15List) {
         //LogUtils.i(this,"onLoadDayWeatherData--------------------2222222222222222>");
         if (resultBean == null) {
             return;
         }
         show15Weather(resultBean);
-
+        saveSQLite();
     }
     private List<WeatherModel>  m15DayWeatherList = new ArrayList<>();
     private void show15Weather(DayWeatherBean.ResultBean resultBean) {
         m15DayWeatherList.clear();
         this.mFiveWeatherData = resultBean;
         DayWeatherBean.ResultBean.DailyBean daily = resultBean.getDaily();
-        if (mCity.equals(SpUtils.getInstance().getString(Contents.CURRENT_CITY))) {
+
+        String week;
+        for (int i = 0; i < daily.getSkycon().size(); i++) {
+            DayWeatherBean.ResultBean.DailyBean.AstroBean astroBean = daily.getAstro().get(i);
+            String date = astroBean.getDate().substring(0, 10);
+            DayWeatherBean.ResultBean.DailyBean.SkyconBean skyconBean = daily.getSkycon().get(i);
+            DayWeatherBean.ResultBean.DailyBean.TemperatureBean temperatureData = daily.getTemperature().get(i);
+            DayWeatherBean.ResultBean.DailyBean.AirQualityBean.AqiBean aqiBean = daily.getAir_quality().getAqi().get(i);
+
+            if (i == 0) {
+                week = "今天";
+            } else if (i == 1) {
+                week = "明天";
+            } else {
+                week = DateUtil.getWeek(date);
+            }
+            WeatherModel weather15 = new WeatherModel();
+            weather15.setDate(DateUtil.StrToData(date));
+            weather15.setWeek(week);
+            weather15.setDayWeather(WeatherUtils.weatherPhenomena(skyconBean.getValue()));
+            weather15.setDayTemp(((int) temperatureData.getMax()));
+            weather15.setNightTemp((int) temperatureData.getMin());
+            weather15.setDayPic(WeatherUtils.weatherIcon(skyconBean.getValue()));
+            weather15.setNightPic(WeatherUtils.weatherIcon(skyconBean.getValue()));
+            weather15.setNightWeather(WeatherUtils.weatherPhenomena(skyconBean.getValue()));
+            weather15.setAirLevel(WeatherUtils.aqiState((int) aqiBean.getAvg().getChn()));
+            m15DayWeatherList.add(weather15);
+        }
+
+
+        weatherView.setList(m15DayWeatherList);
+                five_forecast.setVisibility(View.VISIBLE);
+
+
+
+
+        if (mCity!=null&&mCity.equals(SpUtils.getInstance().getString(Contents.CURRENT_CITY))) {
             List<DayWeatherBean.ResultBean.DailyBean.AstroBean> astro = daily.getAstro();
             DayWeatherBean.ResultBean.DailyBean.AstroBean sunriser = astro.get(0);
             String sunrise = sunriser.getSunrise().getTime();
@@ -516,37 +558,8 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
         mWea.setText(mWeaType);
         EventBus.getDefault().post(new LocationBean(mCity, mLongitude, mLatitude, value, mMax, mMin));
 
-        String week = null;
-        for (int i = 0; i < daily.getSkycon().size(); i++) {
-            DayWeatherBean.ResultBean.DailyBean.AstroBean astroBean = daily.getAstro().get(i);
-            String date = astroBean.getDate().substring(0, 10);
-            DayWeatherBean.ResultBean.DailyBean.SkyconBean skyconBean = daily.getSkycon().get(i);
-            DayWeatherBean.ResultBean.DailyBean.TemperatureBean temperatureData = daily.getTemperature().get(i);
-            DayWeatherBean.ResultBean.DailyBean.AirQualityBean.AqiBean aqiBean = daily.getAir_quality().getAqi().get(i);
 
-            if (i == 0) {
-                week = "今天";
-            } else if (i == 1) {
-                week = "明天";
-            } else {
-                week = DateUtil.getWeek(date);
-            }
-            WeatherModel weather15 = new WeatherModel();
-            weather15.setDate(DateUtil.StrToData(date));
-            weather15.setWeek(week);
-            weather15.setDayWeather(WeatherUtils.weatherPhenomena(skyconBean.getValue()));
-            weather15.setDayTemp(((int) temperatureData.getMax()));
-            weather15.setNightTemp((int) temperatureData.getMin());
-            weather15.setDayPic(WeatherUtils.weatherIcon(skyconBean.getValue()));
-            weather15.setNightPic(WeatherUtils.weatherIcon(skyconBean.getValue()));
-            weather15.setNightWeather(WeatherUtils.weatherPhenomena(skyconBean.getValue()));
-            weather15.setAirLevel(WeatherUtils.aqiState((int) aqiBean.getAvg().getChn()));
-            m15DayWeatherList.add(weather15);
-        }
 
-        weatherView.setList(m15DayWeatherList);
-
-        five_forecast.setVisibility(View.VISIBLE);
     }
 
     private List<MjDesBean> mHour24Data = new ArrayList<>();
@@ -563,6 +576,7 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     }
 
     private void show24Weather(HourWeatherBean weatherBean) {
+        dismissLoading();
         mHour24Data.clear();
         this.mHourWeatherBean = weatherBean;
         HourWeatherBean.ResultBean.HourlyBean hourly = weatherBean.getResult().getHourly();
@@ -584,7 +598,7 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     }
 
     private void saveSQLite() {
-        if (!TextUtils.isEmpty(mCity) & mDescribes != null & mHourWeatherBean != null & mFiveWeatherData != null & mLifeIndexData != null) {
+
             if (mCachePresent != null) {
                 mCachePresent.addWeatherCache(new WeatherCacheBean(mCity, JSON.toJSONString(mDescribes)
                         , JSON.toJSONString(mHourWeatherBean)
@@ -592,7 +606,6 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
                         , JSON.toJSONString(mFiveWeatherData)
                         , JSON.toJSONString(mLifeIndexData)
                 ));
-            }
         }
     }
 
@@ -610,15 +623,17 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     private void showWarning(WarningBean warningBean) {
         this.mWarningBean = warningBean;
         WarningBean.DataBean data = warningBean.getData();
-        List<WarningBean.DataBean.AlertBean> alert = data.getAlert();
-        if (alert != null) {
-            rl_zaiHai.setVisibility(View.VISIBLE);
-            WarningBean.DataBean.AlertBean alertBean = alert.get(0);
-            tv_disaster_title.setText(alertBean.getType() + "预警");
-            LogUtils.i(this, "---------getPub_time-------------" + alertBean.getPub_time());
-            String pub_time = alertBean.getPub_time();
-            String realTime = pub_time.substring(11, 16);
-            tv_update.setText("更新于" + realTime);
+        if (data != null) {
+            List<WarningBean.DataBean.AlertBean> alert = data.getAlert();
+            if (alert != null) {
+                rl_zaiHai.setVisibility(View.VISIBLE);
+                WarningBean.DataBean.AlertBean alertBean = alert.get(0);
+                tv_disaster_title.setText(alertBean.getType() + "预警");
+                LogUtils.i(this, "---------getPub_time-------------" + alertBean.getPub_time());
+                String pub_time = alertBean.getPub_time();
+                String realTime = pub_time.substring(11, 16);
+                tv_update.setText("更新于" + realTime);
+            }
         }
     }
 
@@ -755,13 +770,15 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     //网络请求等待回调
     @Override
     public void onLoading() {
-        setViewState(ViewState.LOADING);
+     //   setViewState(ViewState.LOADING);
+        showLoading();
     }
 
     //网络请求错误回调
     @Override
     public void onError() {
         LogUtils.i(this, "onError---------//////////////////////////-------------------->");
+        dismissLoading();
     }
 
 

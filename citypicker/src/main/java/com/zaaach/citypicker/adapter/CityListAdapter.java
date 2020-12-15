@@ -143,7 +143,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.BaseVi
                         }
                     } else {
                         if (mInnerListener != null) {
-                            mInnerListener.locateFail();
+                            mInnerListener.locateFail(pos, data);
                         }
                     }
 

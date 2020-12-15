@@ -70,7 +70,7 @@ public class GridListAdapter extends RecyclerView.Adapter<GridListAdapter.GridVi
                     }
                 } else {
                     if (mInnerListener != null) {
-                        mInnerListener.locateFail();
+                        mInnerListener.locateFail(pos, data);
                     }
                 }
 

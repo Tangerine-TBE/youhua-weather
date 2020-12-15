@@ -54,7 +54,7 @@ public class AdFragment extends BaseFragment implements IAdCallback {
             Map<String, String> adKey = SpUtil.getADKey();
             if (data != null || adKey != null) {
 
-                mSplashHelper.showAd();
+               mSplashHelper.showAd();
                 isShow = true;
             }
             if (mAdPresent != null) {

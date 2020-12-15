@@ -20,7 +20,7 @@ public interface ILocationDao extends IBasePresent<ILocationCallback> {
 
     void updateCity(LocationBean locationBean);
 
-    void updateLocationCity(LocationBean locationBean);
+    void updateLocationCity(LocationBean locationBean,LocationBean lastCity);
 
    List<LocationBean> getCityList();
 

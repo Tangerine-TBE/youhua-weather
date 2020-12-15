@@ -68,7 +68,7 @@ class Day15Fragment:Fragment(), IHuangLiCallback {
 
         position = arguments!!.getInt(Contents.CURRENT_POSITION)
           mBanFeedHelper = BanFeedHelper(activity, banner_container, feed_container)
-         mBanFeedHelper?.showAd(BanFeedHelper.AdType.TEMPERATURE_PAGE)
+         mBanFeedHelper?.showAd(BanFeedHelper.AdType.AIRQUALITY_PAGE)
 
      }
     private var mHuangLiPresent:HuangLiPresentImpl?=null

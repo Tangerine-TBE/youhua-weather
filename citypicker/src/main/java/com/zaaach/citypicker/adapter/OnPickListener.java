@@ -6,5 +6,5 @@ public interface OnPickListener {
     void onPick(int position, City data);
     void onLocate();
     void onCancel();
-    void onFail();
+    void onFail(int position, City data);
 }
