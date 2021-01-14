@@ -119,7 +119,6 @@ public class RetrofitManager {
         httpClientBuilder.connectTimeout(10, TimeUnit.SECONDS);
         httpClientBuilder.readTimeout(10,TimeUnit.SECONDS);
         //add log record
-        if (BuildConfig.DEBUG) {
             //打印网络请求日志
             LoggingInterceptor httpLoggingInterceptor = new LoggingInterceptor.Builder()
                     .loggable(BuildConfig.DEBUG)
@@ -130,7 +129,6 @@ public class RetrofitManager {
                     .response("响应")
                     .build();
             httpClientBuilder.addInterceptor(httpLoggingInterceptor);
-        }
         return httpClientBuilder;
     }
 }

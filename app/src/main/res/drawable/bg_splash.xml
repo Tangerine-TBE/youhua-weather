@@ -7,7 +7,7 @@
 
     <item >
         <bitmap android:src="@mipmap/launch_bg1"
-            android:gravity="top"
+            android:gravity="fill"
             />
     </item>
     <item  android:bottom="80dp">

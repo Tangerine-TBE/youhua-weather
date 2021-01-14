@@ -32,15 +32,8 @@ import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.ImmersionUtil;
 import com.example.tianqi.utils.PackageUtil;
 import com.permissionx.guolindev.PermissionX;
-import com.permissionx.guolindev.callback.ExplainReasonCallbackWithBeforeParam;
-import com.permissionx.guolindev.callback.ForwardToSettingsCallback;
-import com.permissionx.guolindev.callback.RequestCallback;
-import com.permissionx.guolindev.request.ExplainScope;
-import com.permissionx.guolindev.request.ForwardScope;
 import com.tamsiree.rxui.view.dialog.RxDialogSureCancel;
 import com.tiantian.tianqi.R;
-
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -195,29 +188,20 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
         PermissionX.init(getActivity())
                 .permissions(permissions)
                 .setDialogTintColor(Color.parseColor(ColorUtil.COLOR_THEME), Color.parseColor(ColorUtil.COLOR_THEME))
-                .onExplainRequestReason(new ExplainReasonCallbackWithBeforeParam() {
-                    @Override
-                    public void onExplainReason(ExplainScope scope, List<String> deniedList, boolean beforeRequest) {
+                .onExplainRequestReason((scope, deniedList, beforeRequest) -> {
 
-                       String msg="即将申请的权限是程序必须依赖的权限";
-                        scope.showRequestReasonDialog(deniedList,msg,"开启","取消");
+                   String msg="即将申请的权限是程序必须依赖的权限";
+                    scope.showRequestReasonDialog(deniedList,msg,"开启","取消");
 
-                    }
                 })
-                .onForwardToSettings(new ForwardToSettingsCallback() {
-                    @Override
-                    public void onForwardToSettings(ForwardScope scope, List<String> deniedList) {
+                .onForwardToSettings((scope, deniedList) -> {
 
-                        String msg="您需要去应用程序设置当中手动开启权限";
-                        scope.showForwardToSettingsDialog(deniedList,msg,"开启","取消");
-                    }
+                    String msg="您需要去应用程序设置当中手动开启权限";
+                    scope.showForwardToSettingsDialog(deniedList,msg,"开启","取消");
                 })
-                .request(new RequestCallback() {
-                    @Override
-                    public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
-                        if (allGranted) {
-                            ImmersionUtil.startActivity(getActivity(), FirstLocationActivity.class,false);
-                        }
+                .request((allGranted, grantedList, deniedList) -> {
+                    if (allGranted) {
+                        ImmersionUtil.startActivity(getActivity(), FirstLocationActivity.class,false);
                     }
                 });
 

@@ -11,8 +11,8 @@ android {
         applicationId "com.youhua.zhongyangtianqi"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 5
-        versionName "1.4"
+        versionCode 7
+        versionName "1.6"
         flavorDimensions "versionCode"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -52,7 +52,6 @@ android {
 
     buildTypes {
         release {
-            debuggable true  //可以debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -70,25 +69,26 @@ android {
     }
 
     //    只在打包提测时改apk文件名，开发时记得注释掉
-/*    applicationVariants.all { variant ->
+    applicationVariants.all { variant ->
                variant.getPackageApplication().outputDirectory = new File("F:/中央天气预报")
               variant.outputs.all {
                     outputFileName = "${variant.productFlavors[0].manifestPlaceholders.get("app_name_channel")}" +
                           "_${variant.productFlavors[0].name}" +
                          "_${variant.versionName}.apk"
              }
-        }*/
+        }
 
-  /*  中央天气的打1.3
-    中央天气预报：VIVO，小米，应用宝，联想，阿里
-    天气预报专家：360
-    气象天气预报：oppo   华为*/
+
+/*    优话  1.5
+    天气预报：360，联想，阿里
+    中央天气预报：小米，百度，应用宝
+    气象天气预报：oppo  VIVO*/
 
     productFlavors {
 
         _anzhi {
             manifestPlaceholders = [
-                    app_name_channel: "中央天气预报",
+                    app_name_channel: "天气预报",
                     CHANNEL_VALUE:"_anzhi"]
         }
         _lenovo {
@@ -104,9 +104,8 @@ android {
         }
         _vivo {
 
-            
             manifestPlaceholders = [
-                    app_name_channel: "优话天气预报",
+                    app_name_channel: "天气预报",
                     CHANNEL_VALUE:"_vivo"]
         }
         _360 {
@@ -134,21 +133,21 @@ android {
 
             
             manifestPlaceholders = [
-                    app_name_channel: "中央天气预报",
+                    app_name_channel: "天气预报",
                     CHANNEL_VALUE:"_baidu"]
         }
         _huawei {
 
             
             manifestPlaceholders = [
-                    app_name_channel: "气象天气预报",
+                    app_name_channel: "天气预报",
                     CHANNEL_VALUE:"_huawei"]
         }
         _meizu {
 
             
             manifestPlaceholders = [
-                    app_name_channel: "中央天气预报",
+                    app_name_channel: "天气预报",
                     CHANNEL_VALUE:"_meizu"]
         }
         _alibaba {
@@ -162,7 +161,7 @@ android {
 
             
             manifestPlaceholders = [
-                    app_name_channel: "中央天气预报",
+                    app_name_channel: "天气预报",
                     CHANNEL_VALUE:"_google"]
         }
     }

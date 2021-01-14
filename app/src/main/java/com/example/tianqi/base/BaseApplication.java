@@ -8,8 +8,6 @@ import com.example.module_ad.advertisement.TTAdManagerHolder;
 import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.PackageUtil;
 import com.example.tianqi.utils.SpUtils;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechUtility;
 import com.tamsiree.rxkit.RxTool;
 import com.umeng.commonsdk.UMConfigure;
 
@@ -57,9 +55,6 @@ public class BaseApplication extends com.example.module_tool.base.BaseApplicatio
 
         //穿山甲广告
         TTAdManagerHolder.init(getApplicationContext());
-
-        //科大
-        SpeechUtility.createUtility(getApplicationContext(), SpeechConstant.APPID + "=5f22b05a");
 
 
 

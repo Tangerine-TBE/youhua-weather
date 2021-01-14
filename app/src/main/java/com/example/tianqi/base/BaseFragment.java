@@ -126,8 +126,10 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void showLoading() {
-        if (mLoadingDialog != null&!mLoadingDialog.isShowing()) {
-            mLoadingDialog.show();
+        if (mLoadingDialog != null) {
+            if (!mLoadingDialog.isShowing()&!getActivity().isFinishing()) {
+                mLoadingDialog.show();
+            }
         }
     }
 

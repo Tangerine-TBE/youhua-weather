@@ -55,7 +55,7 @@ import com.example.tianqi.utils.ColorUtil;
 import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.DateUtil;
 import com.example.tianqi.utils.SpUtils;
-import com.example.tianqi.utils.TTSUtility;
+import com.example.tianqi.utils.SpeakUtil;
 import com.example.tianqi.utils.WeatherUtils;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
@@ -151,6 +151,7 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     private HuangLiBean mHuangLiData;
     private WarningBean mWarningBean;
     private HourWeatherBean mHourWeatherBean;
+    private AnimationDrawable mDrawable;
 
 
     public static WeatherFragment getInstance(LocationBean locationBean) {
@@ -173,6 +174,15 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     //切换mNestedScrollView置顶
    public void setTopNestedScrollView() {
        mNestedScrollView.scrollTo(0,0);
+       if (SpeakUtil.INSTANCE.isSpeaking()) {
+           if (mDrawable != null) {
+               mDrawable.selectDrawable(0);
+               mDrawable.stop();
+           }
+       }
+       SpeakUtil.INSTANCE.stopSpeak();
+
+
    }
 
     //初始化
@@ -288,28 +298,24 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
             }
         });
 
-        mReport_iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!TTSUtility.isSpeaking() & CommonUtil.isNetworkAvailable(getActivity())) {
-                    String report = mCity + ",今天天气%s,气温%s到%s摄氏度";
-                    TTSUtility ttsUtility = TTSUtility.getInstance(getActivity());
-                    ttsUtility.speaking(String.format(report, mWeaType, mMin, mMax));
-                    AnimationDrawable drawable = (AnimationDrawable) mReport_iv.getDrawable();
-                    ttsUtility.setOnSpeechListener(new TTSUtility.OnSpeechListener() {
-                        @Override
-                        public void onStart() {
-                            drawable.start();
-                        }
+        mReport_iv.setOnClickListener(view -> {
+            if (CommonUtil.isNetworkAvailable(getActivity())) {
+                String report = mCity + ",今天天气%s,气温%s到%s摄氏度";
+                SpeakUtil.INSTANCE.speakText(String.format(report, mWeaType, mMin, mMax));
+                mDrawable = (AnimationDrawable) mReport_iv.getDrawable();
+                SpeakUtil.INSTANCE.setOnSpeechListener(new SpeakUtil.OnSpeechListener() {
+                    @Override
+                    public void onStart() {
+                        mDrawable.start();
+                    }
 
-                        @Override
-                        public void onStop() {
-                            drawable.selectDrawable(0);
-                            drawable.stop();
+                    @Override
+                    public void onStop() {
+                        mDrawable.selectDrawable(0);
+                        mDrawable.stop();
 
-                        }
-                    });
-                }
+                    }
+                });
             }
         });
 
@@ -577,24 +583,28 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
 
     private void show24Weather(HourWeatherBean weatherBean) {
         dismissLoading();
-        mHour24Data.clear();
-        this.mHourWeatherBean = weatherBean;
-        HourWeatherBean.ResultBean.HourlyBean hourly = weatherBean.getResult().getHourly();
-        mHigh_low.setText((int) hourly.getTemperature().get(0).getValue() + "℃");
-        List<HourWeatherBean.ResultBean.HourlyBean.SkyconBean> skycon = hourly.getSkycon();
-        List<HourWeatherBean.ResultBean.HourlyBean.TemperatureBean> temperature = hourly.getTemperature();
-        for (int i = 0; i < skycon.size() / 2; i++) {
-            String time = skycon.get(i).getDatetime().substring(11, 16);
+        if (weatherBean.getResult() != null) {
+            mHour24Data.clear();
+            this.mHourWeatherBean = weatherBean;
 
-            int tem = (int) temperature.get(i).getValue();
+            HourWeatherBean.ResultBean.HourlyBean hourly = weatherBean.getResult().getHourly();
+            mHigh_low.setText((int) hourly.getTemperature().get(0).getValue() + "℃");
+            List<HourWeatherBean.ResultBean.HourlyBean.SkyconBean> skycon = hourly.getSkycon();
+            List<HourWeatherBean.ResultBean.HourlyBean.TemperatureBean> temperature = hourly.getTemperature();
+            for (int i = 0; i < skycon.size() / 2; i++) {
+                String time = skycon.get(i).getDatetime().substring(11, 16);
 
-            String value = skycon.get(i).getValue();
-            int weatherIcon = WeatherUtils.weatherIcon(value);
+                int tem = (int) temperature.get(i).getValue();
 
-            mHour24Data.add(new MjDesBean(tem + "", weatherIcon, time));
+                String value = skycon.get(i).getValue();
+                int weatherIcon = WeatherUtils.weatherIcon(value);
+
+                mHour24Data.add(new MjDesBean(tem + "", weatherIcon, time));
+            }
+            mTwentyFourAdapter.setNewData(mHour24Data);
+            rv_container24Hours.setVisibility(View.VISIBLE);
         }
-        mTwentyFourAdapter.setNewData(mHour24Data);
-        rv_container24Hours.setVisibility(View.VISIBLE);
+
     }
 
     private void saveSQLite() {
@@ -612,7 +622,9 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     //降雨信息
     @Override
     public void onLoadRainWeatherData(RainWeatherBean rainWeatherBean) {
-        showRainForecast(rainWeatherBean);
+        if (rainWeatherBean.getResult() != null) {
+            showRainForecast(rainWeatherBean);
+        }
     }
 
     //预警信息
