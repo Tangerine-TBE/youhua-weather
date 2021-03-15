@@ -11,8 +11,8 @@ android {
         applicationId "com.youhua.zhongyangtianqi"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 7
-        versionName "1.6"
+        versionCode 17
+        versionName "1.7"
         flavorDimensions "versionCode"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
