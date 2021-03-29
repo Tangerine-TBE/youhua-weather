@@ -105,7 +105,7 @@ android {
         _vivo {
 
             manifestPlaceholders = [
-                    app_name_channel: "天气预报",
+                    app_name_channel: "准时天气预报",
                     CHANNEL_VALUE:"_vivo"]
         }
         _360 {
