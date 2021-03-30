@@ -37,7 +37,6 @@ public class HuangLiPresentImpl implements IHuangLiPresent {
                         for (IHuangLiCallback callback : mCallbacks) {
                             callback.onLoadHuangLi(body);
                         }
-
                 }
                 }
 

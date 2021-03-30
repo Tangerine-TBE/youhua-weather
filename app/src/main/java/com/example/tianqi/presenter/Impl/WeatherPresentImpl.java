@@ -283,7 +283,7 @@ public class WeatherPresentImpl implements IWeatherPresent {
 
     //下拉刷新
     @Override
-    public void pullToRefresh() {
+    public void pullToRefresh(double mLongitude,double mLatitude) {
           LogUtils.i(this, "经度------------>" + mLongitude+"纬度---------"+mLatitude);
         doRequestRealTimeWeather(mLongitude,mLatitude,true);
         doRequestDayWeather(mLongitude,mLatitude,true);

@@ -10,6 +10,7 @@ public interface IWeatherCacheCallback {
 
     void deleteCacheState(boolean state);
 
-
     void onLoadCacheSuccess(List<WeatherCacheBean> cacheBeanList);
+
+
 }

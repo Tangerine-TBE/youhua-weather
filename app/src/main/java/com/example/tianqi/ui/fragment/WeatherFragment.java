@@ -25,6 +25,7 @@ import com.example.module_ad.utils.CommonUtil;
 import com.example.module_ad.utils.LogUtils;
 import com.example.tianqi.base.BaseApplication;
 import com.example.tianqi.base.BaseFragment;
+import com.example.tianqi.db.WeatherCacheDao;
 import com.example.tianqi.model.bean.DayWeatherBean;
 import com.example.tianqi.model.bean.DescribeBean;
 import com.example.tianqi.model.bean.HourWeatherBean;
@@ -56,6 +57,7 @@ import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.DateUtil;
 import com.example.tianqi.utils.SpUtils;
 import com.example.tianqi.utils.SpeakUtil;
+import com.example.tianqi.utils.UtilsKt;
 import com.example.tianqi.utils.WeatherUtils;
 import com.scwang.smart.refresh.header.MaterialHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
@@ -68,6 +70,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -153,6 +156,7 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     private HourWeatherBean mHourWeatherBean;
     private AnimationDrawable mDrawable;
 
+    private static final int REQUEST_NEW__DATA_TIME=10;
 
     public static WeatherFragment getInstance(LocationBean locationBean) {
         WeatherFragment fragment = new WeatherFragment();
@@ -172,18 +176,16 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     }
 
     //切换mNestedScrollView置顶
-   public void setTopNestedScrollView() {
-       mNestedScrollView.scrollTo(0,0);
-       if (SpeakUtil.INSTANCE.isSpeaking()) {
-           if (mDrawable != null) {
-               mDrawable.selectDrawable(0);
-               mDrawable.stop();
-           }
-       }
-       SpeakUtil.INSTANCE.stopSpeak();
-
-
-   }
+    public void setTopNestedScrollView() {
+        mNestedScrollView.scrollTo(0, 0);
+        if (SpeakUtil.INSTANCE.isSpeaking()) {
+            if (mDrawable != null) {
+                mDrawable.selectDrawable(0);
+                mDrawable.stop();
+            }
+        }
+        SpeakUtil.INSTANCE.stopSpeak();
+    }
 
     //初始化
     @Override
@@ -242,12 +244,6 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
         mHuangLiPresent = new HuangLiPresentImpl();
         mHuangLiPresent.registerCallback(this);
 
-        if (!CommonUtil.isNetworkAvailable(getContext())) {
-            if (mCachePresent != null) {
-                mCachePresent.getWeatherCache();
-            }
-            RxToast.warning(getContext(), getString(R.string.connect_error));
-        }
 
     }
 
@@ -258,6 +254,39 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
         mCity = arguments.getString(Contents.CITY);
         mLongitude = arguments.getDouble(Contents.LONGITUDE);
         mLatitude = arguments.getDouble(Contents.LATITUDE);
+
+        if (!CommonUtil.isNetworkAvailable(getContext())) {
+            requestOldWeather();
+            RxToast.warning(getContext(), getString(R.string.connect_error));
+        } else {
+            long cacheTime = mSp.getLong(Contents.SP_CACHE_TIME, 0L);
+            long cacheLastTime = UtilsKt.calLastedTime(new Date(), new Date(cacheTime));
+            if (cacheTime != 0L) {
+                if (cacheLastTime > REQUEST_NEW__DATA_TIME) {
+                    requestNewWeather();
+                } else {
+                    if (WeatherCacheDao.getInstance().mList.contains(mCity)) {
+                        requestOldWeather();
+                    } else {
+                        requestNewWeather();
+                    }
+                }
+                LogUtils.i(this, "-----rqbTime---------------------------"+cacheLastTime);
+            } else {
+                requestNewWeather();
+            }
+        }
+
+    }
+
+    private void requestOldWeather() {
+        if (mCachePresent != null) {
+            mCachePresent.getWeatherCache();
+            LogUtils.i(this, "-----rqb------requestOldWeather---------------------");
+        }
+    }
+
+    private void requestNewWeather() {
         if (mWeatherPresent != null & mHuangLiPresent != null) {
             mWeatherPresent.getLifeWeatherInfo(mLongitude, mLatitude);
             mWeatherPresent.getRealTimeWeatherInfo(mLongitude, mLatitude);
@@ -270,9 +299,8 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
             int month = (calendar.get(Calendar.MONTH)) + 1;
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             mHuangLiPresent.getHuangLi(day + "", month + "", year + "");
+            LogUtils.i(this, "-----rqb------requestNewWeather---------------------");
         }
-
-
     }
 
     //事件监听
@@ -323,7 +351,7 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 if (mWeatherPresent != null) {
-                    mWeatherPresent.pullToRefresh();
+                    mWeatherPresent.pullToRefresh(mLongitude,mLatitude);
                     mWeatherPresent.getRainWeatherInfo(mLongitude, mLatitude);
                     mWeatherPresent.getLifeWeatherInfo(mLongitude, mLatitude);
                 }
@@ -382,7 +410,9 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
 
         }
     }
+
     List<DescribeBean.Des> list = new ArrayList<>();
+
     //天气描述
     private void setDescribeUi(List<DescribeBean.Des> des) {
         list.clear();
@@ -406,9 +436,9 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
                 }
             }
         }
-        LogUtils.i(this, mPos+"onLoadCacheSuccess-------缓存----------->"+cacheBeanList.size());
+        LogUtils.i(this, mPos + "onLoadCacheSuccess-------缓存----------->" + cacheBeanList.size());
         setViewState(ViewState.SUCCESS);
-        if (mPos >=cacheBeanList.size()) {
+        if (mPos >= cacheBeanList.size()) {
             return;
         }
         if (mPos >= 0) {
@@ -441,6 +471,8 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
                 show15Weather(resultBean);
             }
 
+
+
             //24小时
             String date24WeatherCache = weatherCacheBean.getTfData();
             if (!TextUtils.isEmpty(date24WeatherCache)) {
@@ -458,6 +490,15 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
                     showWarning(warningBean);
                 }
 
+            }
+
+            //降雨
+            String tfRainState = weatherCacheBean.getTfRainState();
+            if (!TextUtils.isEmpty(tfRainState)) {
+                RainWeatherBean rainWeatherBean = JSON.parseObject(tfRainState, RainWeatherBean.class);
+                if (rainWeatherBean != null) {
+                    showRainForecast(rainWeatherBean);
+                }
             }
 
 
@@ -483,7 +524,6 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     }
 
 
-
     //天级天气回调
     @Override
     public void onLoadDayWeatherData(DayWeatherBean.ResultBean resultBean, List<WeatherModel> day15List) {
@@ -494,7 +534,9 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
         show15Weather(resultBean);
         saveSQLite();
     }
-    private List<WeatherModel>  m15DayWeatherList = new ArrayList<>();
+
+    private List<WeatherModel> m15DayWeatherList = new ArrayList<>();
+
     private void show15Weather(DayWeatherBean.ResultBean resultBean) {
         m15DayWeatherList.clear();
         this.mFiveWeatherData = resultBean;
@@ -530,12 +572,10 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
 
 
         weatherView.setList(m15DayWeatherList);
-                five_forecast.setVisibility(View.VISIBLE);
+        five_forecast.setVisibility(View.VISIBLE);
 
 
-
-
-        if (mCity!=null&&mCity.equals(SpUtils.getInstance().getString(Contents.CURRENT_CITY))) {
+        if (mCity != null && mCity.equals(SpUtils.getInstance().getString(Contents.CURRENT_CITY))) {
             List<DayWeatherBean.ResultBean.DailyBean.AstroBean> astro = daily.getAstro();
             DayWeatherBean.ResultBean.DailyBean.AstroBean sunriser = astro.get(0);
             String sunrise = sunriser.getSunrise().getTime();
@@ -563,7 +603,6 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
         iv_wea_icon.setImageResource(WeatherUtils.weatherIcon(value));
         mWea.setText(mWeaType);
         EventBus.getDefault().post(new LocationBean(mCity, mLongitude, mLatitude, value, mMax, mMin));
-
 
 
     }
@@ -609,16 +648,20 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
 
     private void saveSQLite() {
 
-            if (mCachePresent != null) {
-                mCachePresent.addWeatherCache(new WeatherCacheBean(mCity, JSON.toJSONString(mDescribes)
-                        , JSON.toJSONString(mHourWeatherBean)
-                        , JSON.toJSONString(mWarningBean)
-                        , JSON.toJSONString(mFiveWeatherData)
-                        , JSON.toJSONString(mLifeIndexData)
-                ));
+        if (mCachePresent != null) {
+            mCachePresent.addWeatherCache(new WeatherCacheBean(mCity, JSON.toJSONString(mDescribes)
+                    , JSON.toJSONString(mHourWeatherBean)
+                    , JSON.toJSONString(mWarningBean)
+                    , JSON.toJSONString(mFiveWeatherData)
+                    , JSON.toJSONString(mLifeIndexData)
+                    ,JSON.toJSONString(mRainWeatherBean)
+            ));
+            mSp.putLong(Contents.SP_CACHE_TIME,System.currentTimeMillis());
         }
     }
 
+
+    private RainWeatherBean mRainWeatherBean;
     //降雨信息
     @Override
     public void onLoadRainWeatherData(RainWeatherBean rainWeatherBean) {
@@ -627,11 +670,13 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
         }
     }
 
+
     //预警信息
     @Override
     public void onLoadWarningWeatherData(WarningBean warningBean) {
         showWarning(warningBean);
     }
+
     private void showWarning(WarningBean warningBean) {
         this.mWarningBean = warningBean;
         WarningBean.DataBean data = warningBean.getData();
@@ -736,8 +781,12 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
 
     private void showRainForecast(RainWeatherBean rainWeatherBean) {
         RainWeatherBean.ResultBean result = rainWeatherBean.getResult();
-        RainWeatherBean.ResultBean.MinutelyBean minutely = result.getMinutely();
-        tv_forecast.setText(minutely.getDescription() + "");
+        if (result != null) {
+            RainWeatherBean.ResultBean.MinutelyBean minutely = result.getMinutely();
+            tv_forecast.setText(minutely.getDescription() + "");
+            mRainWeatherBean=rainWeatherBean;
+        }
+
     }
 
 
@@ -782,7 +831,7 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     //网络请求等待回调
     @Override
     public void onLoading() {
-     //   setViewState(ViewState.LOADING);
+        //   setViewState(ViewState.LOADING);
         showLoading();
     }
 

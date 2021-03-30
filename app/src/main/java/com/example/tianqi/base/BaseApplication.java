@@ -49,7 +49,7 @@ public class BaseApplication extends com.example.module_tool.base.BaseApplicatio
         }
         FeedbackAPI.setAppExtInfo(jsonObject);
 
-        //友盟
+        //友盟 5f8d051ba88dfc3eb93ab173
         UMConfigure.init(getApplicationContext(),UMConfigure.DEVICE_TYPE_PHONE,"5f8d051ba88dfc3eb93ab173");
         UMConfigure.setLogEnabled(true);
 

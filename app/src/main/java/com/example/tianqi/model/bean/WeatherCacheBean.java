@@ -62,6 +62,16 @@ public class WeatherCacheBean {
         this.lifeIndex = lifeIndex;
     }
 
+    public WeatherCacheBean(String city, String describe, String tfdata,String tfQuality, String fiveWea, String lifeIndex,String tfRainState ) {
+        this.city = city;
+        this.describe = describe;
+        this.tfData=tfdata;
+        this.tfQuality=tfQuality;
+        this.fiveWea = fiveWea;
+        this.lifeIndex = lifeIndex;
+        this.TfRainState = tfRainState;
+    }
+
     public WeatherCacheBean(String city, String describe, String tfData, String tfQuality, String tfWindy, String tfTime, String tfTeam, String tfWeaIcon, String tfRainState, String fiveWea, String lifeIndex) {
         this.city = city;
         this.describe = describe;

@@ -24,6 +24,6 @@ public interface IWeatherPresent extends IBasePresent<IWeatherCallback> {
     //获取生活指数
     void getLifeWeatherInfo(double Longitude,double Latitude);
 
-    void pullToRefresh();
+    void pullToRefresh(double Longitude,double Latitude);
 
 }

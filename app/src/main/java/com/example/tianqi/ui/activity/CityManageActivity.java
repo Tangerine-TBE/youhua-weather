@@ -370,6 +370,7 @@ public class CityManageActivity extends BaseMainActivity implements OnPickListen
 
 
 
+
     @Override
     protected void release() {
         if (mAddressPresent != null) {

@@ -11,6 +11,7 @@ import com.example.tianqi.utils.Contents;
 import com.example.tianqi.presenter.views.IWeaCacheDaoCallback;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class WeatherCacheDao implements IWeatherCacheDao{
@@ -19,7 +20,7 @@ public class WeatherCacheDao implements IWeatherCacheDao{
     private final LocationDBHelper mDbHelper;
     private IWeaCacheDaoCallback mIWeaCacheDaoCallback=null;
     private static WeatherCacheDao  sInstance;
-    private final List<String> mList;
+    public final HashSet<String> mList;
 
     public static WeatherCacheDao getInstance() {
         if (sInstance == null) {
@@ -131,10 +132,10 @@ public class WeatherCacheDao implements IWeatherCacheDao{
         }
     }
 
-    private List<String> queryCity() {
+    private HashSet<String> queryCity() {
         synchronized(mLock) {
             SQLiteDatabase db = null;
-            List<String> list = new ArrayList<>();
+            HashSet<String> list = new HashSet<>();
             try {
                 db = mDbHelper.getReadableDatabase();
                 db.beginTransaction();
@@ -168,6 +169,7 @@ public class WeatherCacheDao implements IWeatherCacheDao{
                 db.beginTransaction();
                 db.delete(Contents.WEATHER_CACHE, Contents.CITY + "=?", new String[]{city});
                 db.setTransactionSuccessful();
+                mList.remove(city);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -195,13 +197,10 @@ public class WeatherCacheDao implements IWeatherCacheDao{
                     String tf_quality = query.getString(query.getColumnIndex(Contents.TF_QUALITY));
                     String tf_windy = query.getString(query.getColumnIndex(Contents.TF_WINDY));
 
-
                     String tf_time = query.getString(query.getColumnIndex(Contents.TF_TIME));
                     String tf_team = query.getString(query.getColumnIndex(Contents.TF_TEAM));
                     String tf_icon = query.getString(query.getColumnIndex(Contents.TF_WEA_ICON));
                     String tf_rain_state = query.getString(query.getColumnIndex(Contents.RAIN_STATE));
-
-
 
                     String five_wea = query.getString(query.getColumnIndex(Contents.FIVE_WEA));
                     String life_index = query.getString(query.getColumnIndex(Contents.LIFE_INDEX));

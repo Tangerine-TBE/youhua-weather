@@ -12,4 +12,6 @@ public interface IWeaCacheDaoCallback {
 
     void onWeaCacheList(List<WeatherCacheBean> list);
 
+
+
 }

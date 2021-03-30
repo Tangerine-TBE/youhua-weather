@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.tianqi.utils.SpUtils;
 import com.feisukj.base.widget.loaddialog.LoadingDialog;
 import com.tiantian.tianqi.R;
 
@@ -25,7 +26,7 @@ public abstract class BaseFragment extends Fragment {
     private View mSuccessView;
     private View mLoadingView;
     private View mErrorView;
-
+    protected SpUtils mSp=SpUtils.getInstance();
     @BindView(R.id.home_bg)
     ImageView mErrorVw;
     private LoadingDialog mLoadingDialog;

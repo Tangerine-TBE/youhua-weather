@@ -17,6 +17,10 @@ public class Contents {
     public static final String FIVE_DATA = "five_data";
     public static final String DESCRIBE_DATA = "describe_data";
 
+
+    //---------------------SP------------------
+    public static final String  SP_CACHE_TIME="SP_CACHE_TIME";
+
     //包名
     public static final String APP_PACKAGE = PackageUtil.getAppProcessName(BaseApplication.getApplication());
 
