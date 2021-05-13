@@ -11,6 +11,9 @@ buildscript {
         maven { url "https://dl.bintray.com/yidian-android/open_android_sdk/" }
         maven { url 'https://dl.bintray.com/umsdk/release' }
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven {
+            url 'https://artifact.bytedance.com/repository/pangle'
+        }
     }
 
     dependencies {
@@ -33,7 +36,9 @@ allprojects {
         maven { url "https://jitpack.io" }
         maven { url "https://dl.bintray.com/yidian-android/open_android_sdk/" }
         maven { url 'https://dl.bintray.com/umsdk/release' }
-        
+        maven {
+            url 'https://artifact.bytedance.com/repository/pangle'
+        }
     }
 }
 

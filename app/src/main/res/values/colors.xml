@@ -8,7 +8,7 @@
     <color name="red_normal">#FF0000</color>
     <color name="red_pressed">#FF6666</color>
     <color name="colorEnableFalse">#CCCCCC</color>
-
+    <color name="colorTransparent">#00000000</color>
     <color name="edt_normal">#EFEFEF</color>
 
     <!--验证码颜色-->

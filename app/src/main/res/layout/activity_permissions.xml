@@ -144,7 +144,7 @@
             <TextView
                 android:id="@+id/textView7"
                 style="@style/PermissionStyle_two"
-                android:text="为您提供精确的扫描、清理服务"
+                android:text="储存城市天气信息，提高响应速度"
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -162,8 +162,7 @@
             <TextView
                 android:id="@+id/textView9"
                 style="@style/PermissionStyle_two"
-                android:text="为您推荐更多精彩内容"
-
+                android:text="准确定位当前城市，精准获取天气预报"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -191,7 +190,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_permission_bg"
-                android:text="立即开启"
+                android:text="同意"
                 android:textColor="@color/colorTheme"
                 android:textSize="18.5sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline53"
@@ -224,7 +223,7 @@
                 android:id="@+id/bt_try"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="仅浏览"
+                android:text="不同意"
                 android:textColor="@color/white"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"

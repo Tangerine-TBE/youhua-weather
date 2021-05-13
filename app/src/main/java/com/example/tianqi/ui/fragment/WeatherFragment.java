@@ -267,8 +267,10 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
                 } else {
                     if (WeatherCacheDao.getInstance().mList.contains(mCity)) {
                         requestOldWeather();
+                        LogUtils.i(this, "-----rqbTime-----------requestOldWeather----------------"+cacheLastTime);
                     } else {
                         requestNewWeather();
+                        LogUtils.i(this, "-----rqbTime----------requestNewWeather-----------------"+cacheLastTime);
                     }
                 }
                 LogUtils.i(this, "-----rqbTime---------------------------"+cacheLastTime);

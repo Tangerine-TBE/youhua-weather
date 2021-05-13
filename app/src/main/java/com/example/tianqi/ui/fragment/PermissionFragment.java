@@ -32,6 +32,7 @@ import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.ImmersionUtil;
 import com.example.tianqi.utils.PackageUtil;
 import com.permissionx.guolindev.PermissionX;
+import com.tamsiree.rxkit.view.RxToast;
 import com.tamsiree.rxui.view.dialog.RxDialogSureCancel;
 import com.tiantian.tianqi.R;
 
@@ -153,7 +154,6 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.READ_PHONE_STATE
     };
 
 
@@ -175,12 +175,7 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
             }
         });
 
-        mTry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkRuntimePermission();
-            }
-        });
+        mTry.setOnClickListener(view -> RxToast.showToast("您需要同意后才能继续使用"+PackageUtil.getAppMetaData(getActivity(),"APP_NAME")+"提供的服务"));
 
     }
 
@@ -200,9 +195,7 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
                     scope.showForwardToSettingsDialog(deniedList,msg,"开启","取消");
                 })
                 .request((allGranted, grantedList, deniedList) -> {
-                    if (allGranted) {
-                        ImmersionUtil.startActivity(getActivity(), FirstLocationActivity.class,false);
-                    }
+                    ImmersionUtil.startActivity(getActivity(), FirstLocationActivity.class,false);
                 });
 
     }
