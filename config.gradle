@@ -96,9 +96,10 @@ ext {
 
 
 
-            //umeng
-            "umeng"                : "com.umeng.sdk:common:1.5.3",
-            "umengAnalytics"       : "com.umeng.sdk:analytics:7.5.1",
+            // 友盟统计SDK
+            "umeng_common"              : 'com.umeng.umsdk:common:9.3.8',// (必选)
+            "umeng_asms"                : 'com.umeng.umsdk:asms:1.2.2',// asms包依赖(必选)
+            "umeng_crash"               : 'com.umeng.umsdk:apm:1.2.0',// native crash包依赖(必选)
 
             //feedback
             "feedback"             : "com.aliyun.ams:alicloud-android-feedback:3.1.1@aar",

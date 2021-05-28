@@ -152,4 +152,5 @@ public class Contents {
     public static final String HUANGLI_DATA = "huangli_data";
     public static final String SUN_COME = "SUN_COME";
     public static final String HL_DATA = "hl_data";
+    public static final String SP_AGREE = "SP_AGREE";
 }

@@ -49,9 +49,17 @@ public class BaseApplication extends com.example.module_tool.base.BaseApplicatio
         }
         FeedbackAPI.setAppExtInfo(jsonObject);
 
-        //友盟 5f8d051ba88dfc3eb93ab173
-        UMConfigure.init(getApplicationContext(),UMConfigure.DEVICE_TYPE_PHONE,"5f8d051ba88dfc3eb93ab173");
-        UMConfigure.setLogEnabled(true);
+
+        //友盟
+        UMConfigure.preInit(
+                this,
+                "5f8d051ba88dfc3eb93ab173",
+                PackageUtil.getAppMetaData(this, Contents.PLATFORM_KEY)
+        );
+        if (SpUtils.getInstance().getBoolean(Contents.SP_AGREE)) {
+            UMConfigure.init(getApplicationContext(),UMConfigure.DEVICE_TYPE_PHONE,"5f8d051ba88dfc3eb93ab173");
+        }
+
 
         //穿山甲广告
         TTAdManagerHolder.init(getApplicationContext());

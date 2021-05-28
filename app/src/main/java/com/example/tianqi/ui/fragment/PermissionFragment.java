@@ -31,10 +31,12 @@ import com.example.tianqi.utils.ColorUtil;
 import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.ImmersionUtil;
 import com.example.tianqi.utils.PackageUtil;
+import com.example.tianqi.utils.SpUtils;
 import com.permissionx.guolindev.PermissionX;
 import com.tamsiree.rxkit.view.RxToast;
 import com.tamsiree.rxui.view.dialog.RxDialogSureCancel;
 import com.tiantian.tianqi.R;
+import com.umeng.commonsdk.UMConfigure;
 
 import butterknife.BindView;
 
@@ -150,8 +152,8 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
 
 
     private  String[] permissions = new String[]{
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+           /* Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,*/
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
     };
@@ -167,12 +169,10 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
 
     @Override
     protected void intEvent() {
-        mGoMainBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                checkRuntimePermission();
-            }
+        mGoMainBt.setOnClickListener(view -> {
+            SpUtils.getInstance().putBoolean(Contents.SP_AGREE,true);
+            UMConfigure.init(getContext(), UMConfigure.DEVICE_TYPE_PHONE,"5f8d051ba88dfc3eb93ab173");
+            checkRuntimePermission();
         });
 
         mTry.setOnClickListener(view -> RxToast.showToast("您需要同意后才能继续使用"+PackageUtil.getAppMetaData(getActivity(),"APP_NAME")+"提供的服务"));

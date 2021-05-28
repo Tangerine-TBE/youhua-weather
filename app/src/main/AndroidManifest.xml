@@ -177,7 +177,6 @@
 
 
         <!--友盟-->
-
         <meta-data android:value="5f8d051ba88dfc3eb93ab173" android:name="UMENG_APPKEY"/>
         <meta-data android:value="${CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
 
