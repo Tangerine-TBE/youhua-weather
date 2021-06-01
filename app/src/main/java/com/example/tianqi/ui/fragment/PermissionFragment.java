@@ -172,7 +172,11 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
         mGoMainBt.setOnClickListener(view -> {
             SpUtils.getInstance().putBoolean(Contents.SP_AGREE,true);
             UMConfigure.init(getContext(), UMConfigure.DEVICE_TYPE_PHONE,"5f8d051ba88dfc3eb93ab173");
-            checkRuntimePermission();
+            if (SpUtils.getInstance().getBoolean(Contents.SP_REFUSE_PERMISSION)) {
+                goHome();
+            } else {
+                checkRuntimePermission();
+            }
         });
 
         mTry.setOnClickListener(view -> RxToast.showToast("您需要同意后才能继续使用"+PackageUtil.getAppMetaData(getActivity(),"APP_NAME")+"提供的服务"));
@@ -184,9 +188,9 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
                 .permissions(permissions)
                 .setDialogTintColor(Color.parseColor(ColorUtil.COLOR_THEME), Color.parseColor(ColorUtil.COLOR_THEME))
                 .onExplainRequestReason((scope, deniedList, beforeRequest) -> {
-
-                   String msg="即将申请的权限是程序必须依赖的权限";
-                    scope.showRequestReasonDialog(deniedList,msg,"开启","取消");
+                    SpUtils.getInstance().putBoolean(Contents.SP_REFUSE_PERMISSION,true);
+                 /*  String msg="即将申请的权限是程序必须依赖的权限";
+                    scope.showRequestReasonDialog(deniedList,msg,"开启","取消");*/
 
                 })
                 .onForwardToSettings((scope, deniedList) -> {
@@ -195,8 +199,12 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
                     scope.showForwardToSettingsDialog(deniedList,msg,"开启","取消");
                 })
                 .request((allGranted, grantedList, deniedList) -> {
-                    ImmersionUtil.startActivity(getActivity(), FirstLocationActivity.class,false);
+                    goHome();
                 });
 
+    }
+
+    private void goHome() {
+        ImmersionUtil.startActivity(getActivity(), FirstLocationActivity.class,false);
     }
 }

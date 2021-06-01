@@ -21,6 +21,8 @@ public class Contents {
     //---------------------SP------------------
     public static final String  SP_CACHE_TIME="SP_CACHE_TIME";
 
+    public static final String SP_REFUSE_PERMISSION = "SP_REFUSE_PERMISSION";
+
     //包名
     public static final String APP_PACKAGE = PackageUtil.getAppProcessName(BaseApplication.getApplication());
 
