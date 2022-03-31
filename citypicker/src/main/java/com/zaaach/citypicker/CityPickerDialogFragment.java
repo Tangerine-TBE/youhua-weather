@@ -302,10 +302,6 @@ public class CityPickerDialogFragment extends DialogFragment implements TextWatc
                 mOnPickListener.onCancel();
             }
         }
-
-
-
-
     }
 
 

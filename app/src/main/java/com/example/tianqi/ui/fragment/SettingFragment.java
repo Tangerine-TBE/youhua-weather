@@ -20,6 +20,7 @@ import com.example.module_ad.utils.MyStatusBarUtil;
 import com.example.module_ad.utils.SizeUtils;
 import com.example.tianqi.base.BaseApplication;
 import com.example.tianqi.base.BaseFragment;
+import com.example.tianqi.feedback.SendFeedbackActivity;
 import com.example.tianqi.model.bean.LoginBean;
 import com.example.tianqi.model.bean.RegisterBean;
 import com.example.tianqi.model.bean.SettingBean;
@@ -38,7 +39,6 @@ import com.example.tianqi.ui.activity.AgreementActivity;
 import com.example.tianqi.ui.activity.CityManageActivity;
 import com.example.tianqi.ui.activity.LoginActivity;
 import com.example.tianqi.ui.activity.PrivacyActivity;
-import com.example.tianqi.ui.activity.UserFeedbackActivity;
 import com.example.tianqi.ui.adapter.SettingAdapter;
 import com.example.tianqi.utils.Contents;
 import com.tamsiree.rxkit.view.RxToast;
@@ -220,8 +220,7 @@ public class SettingFragment extends BaseFragment implements SettingAdapter.OnIt
                 startActivity(intent);
                 break;
             case 1:
-                intent.setClass(mActivity, UserFeedbackActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(requireContext(), SendFeedbackActivity.class));
                 break;
             case 2:
                 intent.setClass(mActivity, AboutActivity.class);

@@ -61,7 +61,6 @@
         <activity android:name="com.example.tianqi.ui.activity.AgreementActivity" />
         <activity android:name="com.example.tianqi.ui.activity.PrivacyActivity" />
         <activity android:name="com.example.tianqi.ui.activity.AboutActivity" />
-        <activity android:name="com.example.tianqi.ui.activity.UserFeedbackActivity" />
         <activity android:name="com.example.tianqi.ui.activity.BackActivity" android:theme="@style/TransparentTheme"></activity>
         <activity android:name="com.example.tianqi.base.BaseMainActivity" />
         <activity
@@ -72,7 +71,8 @@
         <activity android:name="com.example.tianqi.ui.activity.Day15Activity" android:launchMode="singleTop"/>
         <activity android:name="com.example.tianqi.ui.activity.FirstLocationActivity"  android:launchMode="singleTop" android:theme="@style/DefaultCityPickerTheme" />
         <activity android:name="com.example.tianqi.ui.activity.HuangLiActivity"/>
-
+        <activity android:name="com.example.tianqi.feedback.SendFeedbackActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
         <meta-data
             android:name="CHANNEL"

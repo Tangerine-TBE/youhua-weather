@@ -1,8 +1,11 @@
 package com.example.tianqi.utils;
 
+import android.util.Log;
+
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps.MapsInitializer;
 import com.example.tianqi.base.BaseApplication;
 
 import static com.amap.api.location.AMapLocationClientOption.AMapLocationMode.Hight_Accuracy;
@@ -30,7 +33,13 @@ public class GaoDeHelper {
 
 
     private GaoDeHelper() {
-        mLocationClient = new AMapLocationClient(BaseApplication.getAppContext());
+        try {
+            MapsInitializer.updatePrivacyAgree(BaseApplication.getAppContext(),true);
+            mLocationClient = new AMapLocationClient(BaseApplication.getAppContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("地图初始化错误",e.getMessage());
+        }
         initLocation();
 
     }

@@ -1,6 +1,7 @@
 package com.example.tianqi.ui.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -17,6 +19,8 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 
 import com.alibaba.fastjson.JSON;
+import com.amap.api.maps.MapsInitializer;
+import com.example.module_ad.advertisement.TTAdManagerHolder;
 import com.example.module_ad.bean.AdBean;
 import com.example.module_ad.utils.CommonUtil;
 import com.example.module_ad.utils.LogUtils;
@@ -25,6 +29,7 @@ import com.example.tianqi.base.BaseFragment;
 import com.example.tianqi.presenter.Impl.AdPresentImpl;
 import com.example.tianqi.presenter.views.IAdCallback;
 import com.example.tianqi.ui.activity.AgreementActivity;
+import com.example.tianqi.ui.activity.BeginActivity;
 import com.example.tianqi.ui.activity.FirstLocationActivity;
 import com.example.tianqi.ui.activity.PrivacyActivity;
 import com.example.tianqi.utils.ColorUtil;
@@ -152,8 +157,6 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
 
 
     private  String[] permissions = new String[]{
-           /* Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,*/
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
     };
@@ -171,15 +174,30 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
     protected void intEvent() {
         mGoMainBt.setOnClickListener(view -> {
             SpUtils.getInstance().putBoolean(Contents.SP_AGREE,true);
+            Activity activity=getActivity();
+            if (activity instanceof BeginActivity){
+                ((BeginActivity) activity).ttttt();
+            }
+            //穿山甲广告
+            TTAdManagerHolder.init(getContext().getApplicationContext());
             UMConfigure.init(getContext(), UMConfigure.DEVICE_TYPE_PHONE,"5f8d051ba88dfc3eb93ab173");
             if (SpUtils.getInstance().getBoolean(Contents.SP_REFUSE_PERMISSION)) {
                 goHome();
+                requireActivity().finish();
             } else {
                 checkRuntimePermission();
             }
         });
 
-        mTry.setOnClickListener(view -> RxToast.showToast("您需要同意后才能继续使用"+PackageUtil.getAppMetaData(getActivity(),"APP_NAME")+"提供的服务"));
+        mTry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Activity activity=getActivity();
+                if (activity!=null) {
+                    activity.finish();
+                }
+            }
+        });
 
     }
 

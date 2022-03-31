@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.example.module_ad.advertisement.TTAdManagerHolder;
 import com.example.module_base.MainBaseApplication;
 import com.example.module_tool.utils.SPUtil;
 
@@ -30,9 +29,6 @@ public class BaseApplication extends MainBaseApplication {
         super.onCreate();
         handler = new Handler(Looper.getMainLooper());
         SPUtil.init(this);
-        //穿山甲广告
-        TTAdManagerHolder.init(getApplicationContext());
-
     }
 
     public static BaseApplication getApplication() {

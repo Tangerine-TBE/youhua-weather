@@ -17,7 +17,7 @@
         app:tabMode="scrollable"
         app:tabBackground="@color/white"
         app:tabSelectedTextColor="@color/black"
-        app:tabRippleColor="@color/transparent"
+        app:tabRippleColor="#0000"
         android:layout_width="match_parent"
         app:tabTextAppearance="@style/TabLayoutTextSize"
         app:tabTextColor="#919191"

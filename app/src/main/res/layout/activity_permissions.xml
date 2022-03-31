@@ -71,7 +71,8 @@
                 android:layout_height="41dp"
                 android:src="@mipmap/per_device"
                 app:layout_constraintEnd_toEndOf="parent"
-
+                android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guideline46" />
 
@@ -94,6 +95,8 @@
                 android:layout_width="41dp"
                 android:layout_height="41dp"
                 android:src="@mipmap/pe_store"
+                android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guideline47" />
@@ -111,7 +114,6 @@
                 android:layout_height="41dp"
                 android:src="@mipmap/per_location"
                 app:layout_constraintEnd_toEndOf="parent"
-
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guideline48" />
 
@@ -119,6 +121,8 @@
                 android:id="@+id/textView2"
                 style="@style/PermissionStyle_one"
                 android:text="设备信息"
+                android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView5" />
@@ -127,7 +131,8 @@
                 android:id="@+id/textView5"
                 style="@style/PermissionStyle_two"
                 android:text="判断设备信息，保障您的手机安全"
-
+                android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -136,6 +141,8 @@
                 android:id="@+id/textView6"
                 style="@style/PermissionStyle_one"
                 android:text="存储"
+                android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.494"
                 app:layout_constraintStart_toStartOf="parent"
@@ -145,7 +152,8 @@
                 android:id="@+id/textView7"
                 style="@style/PermissionStyle_two"
                 android:text="储存城市天气信息，提高响应速度"
-
+                android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -154,7 +162,6 @@
                 android:id="@+id/textView8"
                 style="@style/PermissionStyle_one"
                 android:text="位置"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView9" />

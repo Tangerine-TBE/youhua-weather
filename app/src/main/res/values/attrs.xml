@@ -24,7 +24,9 @@
         <attr name="svPadding" format="dimension"/>
     </declare-styleable>
 
-
+    <declare-styleable name="ActionBar">
+        <attr name="title" format="string"/>
+    </declare-styleable>
 <!--==========================================-->
     <!-- 是否开启抗锯齿 -->
     <attr name="antiAlias" format="boolean" />
