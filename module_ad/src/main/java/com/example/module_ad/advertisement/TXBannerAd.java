@@ -10,7 +10,7 @@ import com.example.module_ad.utils.LogUtils;
 import com.example.module_base.MainBaseApplication;
 import com.qq.e.ads.banner2.UnifiedBannerADListener;
 import com.qq.e.ads.banner2.UnifiedBannerView;
-import com.qq.e.comm.managers.GDTADManager;
+import com.qq.e.comm.managers.GDTAdSdk;
 import com.qq.e.comm.util.AdError;
 
 
@@ -24,7 +24,7 @@ public class TXBannerAd  extends AdWatcher{
     public TXBannerAd(Activity activity, FrameLayout frameLayout) {
         this.mActivity=activity;
         this.mBannerContainer=frameLayout;
-        GDTADManager.getInstance().initWith(activity, mKgdtMobSDKAppKey);
+        GDTAdSdk.init(activity.getApplication(), mKgdtMobSDKAppKey);
 
     }
 
@@ -78,16 +78,6 @@ public class TXBannerAd  extends AdWatcher{
             @Override
             public void onADLeftApplication() {
                 LogUtils.i(TXBannerAd.this,   "由于广告点击离开 APP 时调用----------------->" );
-            }
-
-            @Override
-            public void onADOpenOverlay() {
-                LogUtils.i(TXBannerAd.this,   "onADOpenOverlay----------------->" );
-            }
-
-            @Override
-            public void onADCloseOverlay() {
-                LogUtils.i(TXBannerAd.this,   "onADCloseOverlay----------------->" );
             }
         });
 

@@ -1,7 +1,12 @@
 package com.example.tianqi.ui.activity;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSON;
 import com.amap.api.location.AMapLocation;
@@ -28,6 +33,7 @@ import com.example.tianqi.utils.WeatherUtils;
 import com.tamsiree.rxkit.view.RxToast;
 import com.tiantian.tianqi.R;
 import com.zaaach.citypicker.CityPicker;
+import com.zaaach.citypicker.adapter.CityListAdapter;
 import com.zaaach.citypicker.adapter.OnPickListener;
 import com.zaaach.citypicker.model.City;
 import com.zaaach.citypicker.model.LocateState;
@@ -118,6 +124,14 @@ public class FirstLocationActivity extends BaseMainActivity implements OnPickLis
     public void onLocate() {
         mGaoDeHelper.startLocation();
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)== PackageManager.PERMISSION_GRANTED){
+            CityListAdapter.haveLocationPermission.setValue(true);
+        }
     }
 
     @Override

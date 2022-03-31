@@ -69,14 +69,14 @@ android {
     }
 
     //    只在打包提测时改apk文件名，开发时记得注释掉
-    applicationVariants.all { variant ->
-               variant.getPackageApplication().outputDirectory = new File("F:/安装包/深圳市优话网络科技有限公司/优化中央天气预报/优化中央天气预报2.2")
-              variant.outputs.all {
-                    outputFileName = "${variant.productFlavors[0].manifestPlaceholders.get("app_name_channel")}" +
-                          "_${variant.productFlavors[0].name}" +
-                         "_${variant.versionName}.apk"
-             }
-        }
+//    applicationVariants.all { variant ->
+//               variant.getPackageApplication().outputDirectory = new File("F:/安装包/深圳市优话网络科技有限公司/优化中央天气预报/优化中央天气预报2.2")
+//              variant.outputs.all {
+//                    outputFileName = "${variant.productFlavors[0].manifestPlaceholders.get("app_name_channel")}" +
+//                          "_${variant.productFlavors[0].name}" +
+//                         "_${variant.versionName}.apk"
+//             }
+//        }
 
 
 /*    优话  1.5
@@ -85,7 +85,11 @@ android {
     气象天气预报：oppo  VIVO*/
 
     productFlavors {
-
+        _321 {
+            manifestPlaceholders = [
+                    app_name_channel: "天气-优话",
+                    CHANNEL_VALUE:"_321"]
+        }
         _anzhi {
             manifestPlaceholders = [
                     app_name_channel: "天气预报",

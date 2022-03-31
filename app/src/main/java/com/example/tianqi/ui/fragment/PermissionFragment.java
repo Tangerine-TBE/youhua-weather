@@ -1,16 +1,13 @@
 package com.example.tianqi.ui.fragment;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -19,7 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 
 import com.alibaba.fastjson.JSON;
-import com.amap.api.maps.MapsInitializer;
 import com.example.module_ad.advertisement.TTAdManagerHolder;
 import com.example.module_ad.bean.AdBean;
 import com.example.module_ad.utils.CommonUtil;
@@ -37,8 +33,6 @@ import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.ImmersionUtil;
 import com.example.tianqi.utils.PackageUtil;
 import com.example.tianqi.utils.SpUtils;
-import com.permissionx.guolindev.PermissionX;
-import com.tamsiree.rxkit.view.RxToast;
 import com.tamsiree.rxui.view.dialog.RxDialogSureCancel;
 import com.tiantian.tianqi.R;
 import com.umeng.commonsdk.UMConfigure;
@@ -154,15 +148,6 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
         }
     }
 
-
-
-    private  String[] permissions = new String[]{
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-    };
-
-
-
     @Override
     protected void release() {
         if (mAdPresent!= null) {
@@ -185,7 +170,7 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
                 goHome();
                 requireActivity().finish();
             } else {
-                checkRuntimePermission();
+                goHome();
             }
         });
 
@@ -198,27 +183,6 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
                 }
             }
         });
-
-    }
-
-    private void checkRuntimePermission() {
-        PermissionX.init(getActivity())
-                .permissions(permissions)
-                .setDialogTintColor(Color.parseColor(ColorUtil.COLOR_THEME), Color.parseColor(ColorUtil.COLOR_THEME))
-                .onExplainRequestReason((scope, deniedList, beforeRequest) -> {
-                    SpUtils.getInstance().putBoolean(Contents.SP_REFUSE_PERMISSION,true);
-                 /*  String msg="即将申请的权限是程序必须依赖的权限";
-                    scope.showRequestReasonDialog(deniedList,msg,"开启","取消");*/
-
-                })
-                .onForwardToSettings((scope, deniedList) -> {
-
-                    String msg="您需要去应用程序设置当中手动开启权限";
-                    scope.showForwardToSettingsDialog(deniedList,msg,"开启","取消");
-                })
-                .request((allGranted, grantedList, deniedList) -> {
-                    goHome();
-                });
 
     }
 
