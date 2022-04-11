@@ -25,7 +25,7 @@ import com.jpeng.jptabbar.OnTabSelectListener;
 import com.jpeng.jptabbar.anno.NorIcons;
 import com.jpeng.jptabbar.anno.SeleIcons;
 import com.jpeng.jptabbar.anno.Titles;
-import com.sr.cejuyiczclds.fragment.MapFragment;
+import com.example.module_tool.fragment.MapFragment;
 import com.tiantian.tianqi.R;
 
 import butterknife.BindView;

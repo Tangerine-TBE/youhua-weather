@@ -149,16 +149,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <TextView
-                android:layout_toRightOf="@+id/tv_nongli"
-                android:layout_alignBaseline="@+id/tv_nongli"
-                android:textColor="@color/black"
-                android:id="@+id/tv_suici"
-                android:textSize="10sp"
-                android:text="庚子年 乙酉月 甲子日"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
         </RelativeLayout>
 
         <RelativeLayout

@@ -5,7 +5,7 @@ import com.example.tianqi.base.BaseApplication;
 public class Contents {
 
     //黄历key
-    public static final String HUANG_LI_KEY="APPCODE 52ce58f29858415596449874e5555eec";
+    public static final String HUANG_LI_KEY="5bc896feb96a91a619c72937e88c10a3";
 
     //activity -> fragment
     public static final String FRAGMENT_ID = "fragmentId";

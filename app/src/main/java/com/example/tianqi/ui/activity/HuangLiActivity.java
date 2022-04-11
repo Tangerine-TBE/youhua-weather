@@ -72,23 +72,14 @@ public class HuangLiActivity extends BaseMainActivity {
 
     }
     private void showHuangLi(HuangLiBean.ResultBean resultBean) {
-
-        StringBuffer stringBuffer=new StringBuffer();
-        List<String> suici = resultBean.getSuici();
-        for (String s : suici) {
-            stringBuffer.append(s+"  ");
-        }
-
-
-        tv_hl_date.setText(resultBean.getYear()+"."+resultBean.getMonth()+"."+resultBean.getDay());
-        String nongli = resultBean.getNongli();
-        tv_hl_nongli.setText( nongli.substring(7,nongli.length()));
-        tv_hl_suici.setText(stringBuffer+"  星期" + resultBean.getWeek());
+        tv_hl_date.setText(resultBean.getYangli());
+        tv_hl_nongli.setText( resultBean.getYinliDate());
+        tv_hl_suici.setText(resultBean.getYinliYear()+"  星期" + resultBean.getWeek());
 
 
         // 宜
         StringBuffer stringBuffer1 = new StringBuffer();
-        for (String s : resultBean.getYi()) {
+        for (String s : resultBean.getYiList()) {
             stringBuffer1.append(s+"  ");
         }
         tv_yi.setText(stringBuffer1);
@@ -96,16 +87,16 @@ public class HuangLiActivity extends BaseMainActivity {
 
         //忌
         StringBuffer stringBuffer2 = new StringBuffer();
-        for (String s : resultBean.getJi()) {
+        for (String s : resultBean.getJiList()) {
             stringBuffer2.append(s+"  ");
         }
         tv_ji.setText(stringBuffer2);
 
-        tv_xiongsheng.setText(resultBean.getJiri());
+        tv_xiongsheng.setText(resultBean.getJishen());
         tv_jishenyiqu.setText(resultBean.getXiongshen());
-        tv_c_hl_text.setText(resultBean.getChong()+"  "+resultBean.getSha());
+        tv_c_hl_text.setText(resultBean.getChongsha()+"  "+resultBean.getSha());
         tv_s_hl_text.setText(resultBean.getWuxing());
-        tv_jiri.setText(resultBean.getJishenyiqu());
+        tv_jiri.setText(resultBean.getJishen());
 
     }
 

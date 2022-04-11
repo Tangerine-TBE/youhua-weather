@@ -10,6 +10,8 @@ import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.RetrofitManager;
 import com.example.tianqi.utils.WeatherUrl;
 
+import java.text.SimpleDateFormat;
+
 import okhttp3.ResponseBody;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -71,8 +73,8 @@ public class WeatherData {
         mApiMj.getMjLifeWeather(Longitude+"",Latitude+"").enqueue(callback);
     }
 
-    public void doRequestHl(String day,String month,String year,Callback<HuangLiBean> callback) {
-        mApiHl.getHuangLi(Contents.HUANG_LI_KEY,day,month,year).enqueue(callback);
+    public void doRequestHl(Callback<HuangLiBean> callback) {
+        mApiHl.getHuangLi(Contents.HUANG_LI_KEY,new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis())).enqueue(callback);
     }
 
 

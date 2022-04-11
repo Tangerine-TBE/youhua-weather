@@ -64,6 +64,7 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.tamsiree.rxkit.view.RxToast;
+import com.tiantian.tianqi.BuildConfig;
 import com.tiantian.tianqi.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -104,8 +105,6 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
     TextView tv_detail;
     @BindView(R.id.tv_nongli)
     TextView tv_nongli;
-    @BindView(R.id.tv_suici)
-    TextView tv_suici;
     @BindView(R.id.tv_yi)
     TextView tv_yi;
     @BindView(R.id.tv_ji)
@@ -254,7 +253,6 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
         mCity = arguments.getString(Contents.CITY);
         mLongitude = arguments.getDouble(Contents.LONGITUDE);
         mLatitude = arguments.getDouble(Contents.LATITUDE);
-
         if (!CommonUtil.isNetworkAvailable(getContext())) {
             requestOldWeather();
             RxToast.warning(getContext(), getString(R.string.connect_error));
@@ -296,11 +294,7 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
             mWeatherPresent.getHourWeatherInfo(mLongitude, mLatitude);
             mWeatherPresent.getRainWeatherInfo(mLongitude, mLatitude);
             mWeatherPresent.getWaringWeatherInfo(mLongitude, mLatitude);
-            Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = (calendar.get(Calendar.MONTH)) + 1;
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-            mHuangLiPresent.getHuangLi(day + "", month + "", year + "");
+            mHuangLiPresent.getHuangLi();
             LogUtils.i(this, "-----rqb------requestNewWeather---------------------");
         }
     }
@@ -710,26 +704,18 @@ public class WeatherFragment extends BaseFragment implements IWeatherCallback, I
         SpUtils.getInstance().putString(Contents.HUANGLI_DATA, JSON.toJSONString(huangLiBean));
         this.mHuangLiData = huangLiBean;
         HuangLiBean.ResultBean result = huangLiBean.getResult();
-        String nongli = result.getNongli();
-        tv_nongli.setText(nongli.substring(7, nongli.length()));
-        //岁次
-        StringBuffer stringBuffer = new StringBuffer();
-        List<String> suici = result.getSuici();
-        for (String s : suici) {
-            stringBuffer.append(s + "  ");
-        }
-        tv_suici.setText(stringBuffer);
+        tv_nongli.setText(result.getYinliDate());
 
         // 宜
         StringBuffer stringBuffer1 = new StringBuffer();
-        for (String s : result.getYi()) {
+        for (String s : result.getYiList()) {
             stringBuffer1.append(s + "  ");
         }
         tv_yi.setText(stringBuffer1);
 
         //忌
         StringBuffer stringBuffer2 = new StringBuffer();
-        for (String s : result.getJi()) {
+        for (String s : result.getJiList()) {
             stringBuffer2.append(s + "  ");
         }
         tv_ji.setText(stringBuffer2);

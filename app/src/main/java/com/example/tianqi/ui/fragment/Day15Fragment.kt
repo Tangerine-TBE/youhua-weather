@@ -85,11 +85,7 @@ class Day15Fragment:Fragment(), IHuangLiCallback {
             showSunset(daily)
             showWea(daily)
             showDescribe(daily)
-            val date = daily.astro[position].date
-            val year = date.substring(0, 4)
-            val month = date.substring(5, 7)
-            val day = date.substring(8, 10)
-            mHuangLiPresent?.getHuangLi(day,month,year)
+            mHuangLiPresent?.getHuangLi()
         }
     }
 
@@ -155,25 +151,16 @@ class Day15Fragment:Fragment(), IHuangLiCallback {
     override fun onLoadHuangLi(huangLiBean: HuangLiBean?) {
         mHuangLiData=huangLiBean
         val result = huangLiBean?.result
-        tv_nongli.text = result?.nongli?.substring(7,result?.nongli!!.length)
-
-        var suici:MutableList<String> = result?.suici!!
-        var stringBuffer = StringBuffer()
-        for (s in suici) {
-            stringBuffer.append("$s  ")
-        }
-        tv_suici.text=stringBuffer
+        tv_nongli.text = result?.getYinliDate()
 
         val stringBuffer1 = StringBuffer()
-        val yi = result.yi
-        for (s in yi) {
+        result?.getYiList()?.forEach { s->
             stringBuffer1.append("$s  ")
         }
         tv_yi.text=stringBuffer1
 
         val stringBuffer2 = StringBuffer()
-        val ji = result.ji
-        for (s in ji) {
+        result?.getJiList()?.forEach { s->
             stringBuffer2.append("$s  ")
         }
         tv_ji.text=stringBuffer2

@@ -26,9 +26,8 @@ public class HuangLiPresentImpl implements IHuangLiPresent {
      }
 
     @Override
-    public void getHuangLi(String day,String month,String year) {
-
-        mData.doRequestHl(day,month,year,new Callback<HuangLiBean>() {
+    public void getHuangLi() {
+        mData.doRequestHl(new Callback<HuangLiBean>() {
             @Override
             public void onResponse(Call<HuangLiBean> call, Response<HuangLiBean> response) {
                 if (response.code()== HttpURLConnection.HTTP_OK) {

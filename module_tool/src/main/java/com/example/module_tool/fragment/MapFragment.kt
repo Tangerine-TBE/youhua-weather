@@ -1,10 +1,9 @@
-package com.sr.cejuyiczclds.fragment
+package com.example.module_tool.fragment
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -18,13 +17,12 @@ import android.util.Log
 import android.view.View
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
-import com.amap.api.mapcore.util.ge
-import com.amap.api.mapcore.util.it
 import com.amap.api.maps.AMap
 import com.amap.api.maps.AMapUtils
 import com.amap.api.maps.UiSettings
 import com.amap.api.maps.model.LatLng
 import com.amap.api.maps.model.MyLocationStyle
+import com.example.module_tool.BuildConfig
 import com.example.module_tool.R
 import com.example.module_tool.activity.SettingActivity
 import com.example.module_tool.base.BaseConstant
@@ -33,7 +31,6 @@ import com.example.module_tool.utils.MyLocation
 import com.example.module_tool.utils.SPUtil
 import com.example.module_tool.utils.toast
 import kotlinx.android.synthetic.main.fragment_map.*
-import java.lang.Exception
 import java.lang.StringBuilder
 import java.text.NumberFormat
 import kotlin.math.abs
@@ -159,7 +156,7 @@ class MapFragment: BaseFragment(), MyLocation.LocationCallback {
         }
 
         barSetting.setOnClickListener {
-            startActivityForResult(Intent(activity,SettingActivity::class.java),TO_SETTING_REQUEST_CODE)
+            startActivityForResult(Intent(activity,SettingActivity::class.java), TO_SETTING_REQUEST_CODE)
         }
 
     }
@@ -168,6 +165,10 @@ class MapFragment: BaseFragment(), MyLocation.LocationCallback {
     private var previousTime:Long=0L
     private var saveLocationType=-1
     private fun locationInfo(){
+        val numberFormat=NumberFormat.getNumberInstance().apply {
+            this.minimumFractionDigits=2
+            this.maximumFractionDigits=2
+        }
         mLocationClient = AMapLocationClient(context!!)
         mLocationClient?.setLocationListener { aMapLocation ->
             if (aMapLocation!=null&&aMapLocation.errorCode==0){
@@ -176,7 +177,7 @@ class MapFragment: BaseFragment(), MyLocation.LocationCallback {
                 Log.i("定位来源",aMapLocation.locationType.toString())
                 Log.i("经纬度","aMapLocation.latitude:${aMapLocation.latitude},aMapLocation.longitude:${aMapLocation.longitude}")
                 Log.i("海拔高度",aMapLocation.altitude.toString()+"m")
-                Log.i("移动速度",aMapLocation.speed.toString()+"m/s")
+                Log.i("移动速度",(aMapLocation.speed*3.6f).toString()+"km/h")
                 if (saveLocationType!=aMapLocation.locationType){
                     if(pressure==null){
                         isGpsEnabled=locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -191,7 +192,9 @@ class MapFragment: BaseFragment(), MyLocation.LocationCallback {
 
 
                     saveLocationType=aMapLocation.locationType
-                    toast("定位精度："+aMapLocation.accuracy.toString()+"米"+"   定位类型：${aMapLocation.locationType}")
+                    if (BuildConfig.DEBUG) {
+                        toast("定位精度：" + aMapLocation.accuracy.toString() + "米" + "   定位类型：${aMapLocation.locationType}")
+                    }
                     if(aMapLocation.locationType==1||pressure!=null){
                         outdoorsTips.visibility=View.GONE
                     }else{
@@ -200,11 +203,7 @@ class MapFragment: BaseFragment(), MyLocation.LocationCallback {
                 }
                 //计算速度
                 if (aMapLocation.hasSpeed()){
-                    speed.text=NumberFormat.getInstance().let {
-                        it.minimumFractionDigits=1
-                        it.maximumFractionDigits=1
-                        it.format(aMapLocation.speed)+"m/s"
-                    }
+                    speed.text=numberFormat.format(aMapLocation.speed*3.6f)+"km/h"
                 }else{
                     val currentLatLng=LatLng(aMapLocation.latitude,aMapLocation.longitude)
                     if (previousLatLng==null){
@@ -214,10 +213,8 @@ class MapFragment: BaseFragment(), MyLocation.LocationCallback {
                     previousLatLng.let { latLng ->
                         if(latLng!=null){
                             if (!(latLng.longitude==currentLatLng.longitude&&latLng.latitude==currentLatLng.latitude)){
-                                speed.text=NumberFormat.getInstance().let {
-                                    it.minimumFractionDigits=1
-                                    it.maximumFractionDigits=1
-                                    it.format(computeSpeed(latLng,currentLatLng,System.currentTimeMillis()-previousTime))+"m/s"
+                                speed.text=numberFormat.let {
+                                    it.format(computeSpeed(latLng,currentLatLng,System.currentTimeMillis()-previousTime)*3.6f)+"km/h"
                                 }
                                 previousLatLng=currentLatLng
                                 previousTime=System.currentTimeMillis()

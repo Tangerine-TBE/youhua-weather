@@ -77,8 +77,8 @@ public interface Api {
         @GET("youhuaWeather")
         Observable<AdBean> getAdMessage(@QueryMap  Map<String,String> params);
 
-        @GET("huangli/date")
-        Call<HuangLiBean> getHuangLi(@Header("Authorization") String key, @Query("day") String day, @Query("month") String month, @Query("year") String year);
+        @GET("laohuangli/d")
+        Call<HuangLiBean> getHuangLi(@Query("key") String key,@Query("date") String day);
 
         @GET("huangli/date")
         Observable<HuangLiBean> getHuangLiCache(@Header("Authorization") String key, @Query("day") String day, @Query("month") String month, @Query("year") String year);
