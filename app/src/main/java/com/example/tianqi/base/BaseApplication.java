@@ -3,7 +3,7 @@ package com.example.tianqi.base;
 import android.content.Context;
 import android.os.Handler;
 
-import com.example.module_ad.advertisement.TTAdManagerHolder;
+import com.example.module_ad.KS_Ad;
 import com.example.tianqi.utils.Contents;
 import com.example.tianqi.utils.PackageUtil;
 import com.example.tianqi.utils.SpUtils;
@@ -36,7 +36,7 @@ public class BaseApplication extends com.example.module_tool.base.BaseApplicatio
         );
         if (SpUtils.getInstance().getBoolean(Contents.SP_AGREE)) {
             //穿山甲广告
-            TTAdManagerHolder.init(getApplicationContext());
+            KS_Ad.Companion.initKSSdk(getApplication());
             UMConfigure.init(getApplicationContext(),UMConfigure.DEVICE_TYPE_PHONE,"5f8d051ba88dfc3eb93ab173");
         }
 

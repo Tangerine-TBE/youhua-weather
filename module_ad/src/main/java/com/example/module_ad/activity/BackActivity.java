@@ -8,8 +8,8 @@ import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.module_ad.KS_Ad;
 import com.example.module_ad.R;
-import com.example.module_ad.advertisement.TTSplashAd;
 import com.example.module_ad.advertisement.TXSplashAd;
 import com.example.module_ad.base.IShowAdCallback;
 import com.example.module_ad.bean.AdBean;
@@ -20,6 +20,8 @@ import com.example.module_ad.utils.SpUtil;
 
 import java.util.Map;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 
 
 /**
@@ -33,7 +35,7 @@ public class BackActivity extends AppCompatActivity {
     private String mTtKaiPingKey;
     private String mTxAppKey;
     private String mTxKaiPingKey;
-    private TTSplashAd mTtSplashAd;
+    private KS_Ad mTtSplashAd;
     private TXSplashAd mTxSplashAd;
 
     private boolean mAddToutiaoAdError=false;
@@ -101,16 +103,16 @@ public class BackActivity extends AppCompatActivity {
     }
 
     private void showBackTTAd() {
-        mTtSplashAd = new TTSplashAd(this, mAdContainer,false,BackActivity.class);
-        mTtSplashAd.showRealAd();
-        mTtSplashAd.setOnShowError(new IShowAdCallback() {
+        mTtSplashAd = new KS_Ad(this);
+        mTtSplashAd.loadSplashAd(mAdContainer, BackActivity.class, false, new Function0<Unit>() {
             @Override
-            public void onShowError() {
+            public Unit invoke() {
                 if (!mAddToutiaoAdError) {
                     showTXBackAd();
                 }
                 mAddToutiaoAdError=true;
                 showADError();
+                return null;
             }
         });
     }

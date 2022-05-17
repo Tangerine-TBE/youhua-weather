@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Window;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.module_ad.bean.AdBean;
@@ -27,7 +28,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseMainActivity extends FragmentActivity {
+public abstract class BaseMainActivity extends AppCompatActivity {
 
     private Unbinder mUnbinder;
     private boolean isShow=false;

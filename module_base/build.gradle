@@ -23,6 +23,7 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.1.0'
     testImplementation 'junit:junit:4.12'
@@ -33,5 +34,7 @@ dependencies {
     api rootProject.ext.dependencies["fastjson"]
     api  'com.umeng.umsdk:common:9.3.8'// 必选
     api  'com.umeng.umsdk:asms:1.2.2'// 必选
-    api 'com.umeng.umsdk:apm:1.2.0' // 错误分析升级为独立产品U-APM可按需集成，
+    api 'com.umeng.umsdk:apm:1.2.0'
+    // 错误分析升级为独立产品U-APM可按需集成，
+    api "com.github.bumptech.glide:glide:4.11.0"
 }

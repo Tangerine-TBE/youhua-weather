@@ -1,7 +1,6 @@
 package com.example.tianqi.ui.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -15,15 +14,9 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
-import com.alibaba.fastjson.JSON;
-import com.example.module_ad.advertisement.TTAdManagerHolder;
-import com.example.module_ad.bean.AdBean;
-import com.example.module_ad.utils.CommonUtil;
+import com.example.module_ad.KS_Ad;
 import com.example.module_ad.utils.LogUtils;
-import com.example.tianqi.base.BaseApplication;
 import com.example.tianqi.base.BaseFragment;
-import com.example.tianqi.presenter.Impl.AdPresentImpl;
-import com.example.tianqi.presenter.views.IAdCallback;
 import com.example.tianqi.ui.activity.AgreementActivity;
 import com.example.tianqi.ui.activity.BeginActivity;
 import com.example.tianqi.ui.activity.FirstLocationActivity;
@@ -41,7 +34,7 @@ import butterknife.BindView;
 
 
 @RequiresApi(api = Build.VERSION_CODES.M)
-public class PermissionFragment extends BaseFragment implements IAdCallback {
+public class PermissionFragment extends BaseFragment {
 
 
     @BindView(R.id.go_main)
@@ -58,11 +51,7 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
 
     @BindView(R.id.permission_container)
     FrameLayout mAdContainer;
-
-
-
     private RxDialogSureCancel mRxDialogSureCancel;
-    private AdPresentImpl mAdPresent;
 
 
 
@@ -96,27 +85,7 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
 
     @Override
     protected void intPresent() {
-        mAdPresent = AdPresentImpl.getInstance();
-        mAdPresent.registerCallback(this);
-        if (CommonUtil.isNetworkAvailable(getContext())) {
-            if (mAdPresent != null) {
-                mAdPresent.toRequestAd();
-            }
-        }
-    }
 
-    @Override
-    public void onLoadAdMsgSuccess(AdBean adBean) {
-        if (adBean != null) {
-            AdBean.DataBean data = adBean.getData();
-            String ad = JSON.toJSONString(data);
-            BaseApplication.getAppContext().getSharedPreferences(Contents.AD_INFO_SP, Context.MODE_PRIVATE).edit().putString(Contents.AD_INFO, ad).apply();
-        }
-    }
-
-
-    @Override
-    public void onLoadAdMsgError() {
     }
 
     private class TextViewSpan1 extends ClickableSpan {
@@ -149,13 +118,6 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
     }
 
     @Override
-    protected void release() {
-        if (mAdPresent!= null) {
-            mAdPresent.unregisterCallback(this);
-        }
-    }
-
-    @Override
     protected void intEvent() {
         mGoMainBt.setOnClickListener(view -> {
             SpUtils.getInstance().putBoolean(Contents.SP_AGREE,true);
@@ -164,7 +126,7 @@ public class PermissionFragment extends BaseFragment implements IAdCallback {
                 ((BeginActivity) activity).ttttt();
             }
             //穿山甲广告
-            TTAdManagerHolder.init(getContext().getApplicationContext());
+            KS_Ad.Companion.initKSSdk(requireActivity().getApplication());
             UMConfigure.init(getContext(), UMConfigure.DEVICE_TYPE_PHONE,"5f8d051ba88dfc3eb93ab173");
             if (SpUtils.getInstance().getBoolean(Contents.SP_REFUSE_PERMISSION)) {
                 goHome();

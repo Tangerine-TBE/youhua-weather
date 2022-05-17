@@ -20,25 +20,14 @@ public class Contents {
 
     //---------------------SP------------------
     public static final String  SP_CACHE_TIME="SP_CACHE_TIME";
-
     public static final String SP_REFUSE_PERMISSION = "SP_REFUSE_PERMISSION";
-
     //包名
     public static final String APP_PACKAGE = PackageUtil.getAppProcessName(BaseApplication.getApplication());
-
-
-
-
     //App名称
     public static final String AppNAME =PackageUtil.getAppMetaData(BaseApplication.getApplication(),"APP_NAME");
-
     public static final String PLATFORM_KEY = "CHANNEL";
-
-
-
     //QQ  id
     public static final String QQ_ID = "1110633257";
-
     //微信
     public static final String WECHAT_APP_ID = "wxd50ba7d3843506b0";
     public static final String WECHAT_SECRET = "4cb785b8a8289e8eb63abfecc423e796";
@@ -52,10 +41,6 @@ public class Contents {
     public static final String AD_VERSION = "version";
     public static final String AD_VERSION_VALUES = PackageUtil.packageCode2(BaseApplication.getApplication());
     public static final String AD_CHANNEL = "channel";
-
-    //广告接口缓存
-    public static final String AD_INFO_SP = "ad_info";
-    public static final String AD_INFO = "ad";
 
     //广告key
     //TT

@@ -3,7 +3,7 @@ package com.example.tianqi.ui.activity;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 
-import com.example.module_ad.advertisement.TTSplashAd;
+import com.example.module_ad.KS_Ad;
 import com.example.module_ad.advertisement.TXSplashAd;
 import com.example.module_ad.base.IShowAdCallback;
 import com.example.module_ad.bean.AdBean;
@@ -16,6 +16,8 @@ import com.tiantian.tianqi.R;
 import java.util.Map;
 
 import butterknife.BindView;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 
 /**
  * @author: Administrator
@@ -25,7 +27,7 @@ public class BackActivity extends BaseMainActivity {
 
     @BindView(R.id.ad_container)
     FrameLayout mAdContainer;
-    private TTSplashAd mTtSplashAd;
+    private KS_Ad mTtSplashAd;
     private TXSplashAd mTxSplashAd;
 
     private boolean mAddToutiaoAdError=false;
@@ -86,16 +88,16 @@ public class BackActivity extends BaseMainActivity {
     }
 
     private void showBackTTAd() {
-        mTtSplashAd = new TTSplashAd(this, mAdContainer,false,MainActivity.class);
-        mTtSplashAd.showRealAd();
-        mTtSplashAd.setOnShowError(new IShowAdCallback() {
+        mTtSplashAd = new KS_Ad(this);
+        mTtSplashAd.loadSplashAd(mAdContainer, MainActivity.class, false, new Function0<Unit>() {
             @Override
-            public void onShowError() {
+            public Unit invoke() {
                 if (!mAddToutiaoAdError) {
                     showTXBackAd();
                 }
                 mAddToutiaoAdError=true;
                 showADError();
+                return null;
             }
         });
 

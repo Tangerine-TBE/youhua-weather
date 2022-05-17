@@ -2,43 +2,6 @@ package com.example.module_ad.utils;
 
 
 public class Contents {
-
-    //activity -> fragment
-    public static final String FRAGMENT_ID = "fragmentId";
-
-
-    //fragment -> activity
-    public static final String FIVE_DATA = "five_data";
-    public static final String DESCRIBE_DATA = "describe_data";
-
-    //包名
-    public static final String APP_PACKAGE = "com.tiantian.tianqi";
-
-    //应用平台
-    public static final String OPPO = "_oppo";
-    public static final String VIVO = "_vivo";
-    public static final String XIAOMI = "_xiaomi";
-    public static final String HUAWEI = "_huawei";
-
-
-    //App名称
-    public static final String AppNAME = "黄历天气";
-    public static final String AppNAME2 = "老黄历天气万年历";
-    public static final String PLATFORM_KEY = "CHANNEL";
-
-
-    //QQ  id
-    public static final String QQ_ID = "1110633257";
-
-    //微信
-    public static final String WECHAT_APP_ID = "wxd50ba7d3843506b0";
-    public static final String WECHAT_SECRET = "4cb785b8a8289e8eb63abfecc423e796";
-    public static final String WXAPPID = "appid";
-    public static final String WXSECRET = "secret";
-    public static final String WXACODE = "code";
-    public static final String WXTYPE = "grant_type";
-
-
     //广告接口缓存
     public static final String AD_INFO_SP = "ad_info";
     public static final String AD_INFO = "ad";

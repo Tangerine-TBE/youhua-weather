@@ -18,9 +18,6 @@ import java.util.Map;
  */
 public class SpUtil {
 
-
-
-
     public static AdBean.DataBean getAdState() {
         SharedPreferences ad_info = MainBaseApplication.getApplication().getSharedPreferences(Contents.AD_INFO_SP, Context.MODE_PRIVATE);
         String ad = ad_info.getString(Contents.AD_INFO, "");
@@ -32,29 +29,34 @@ public class SpUtil {
         return  null;
     }
 
-
-
     public static  Map<String, String>  getADKey() {
         Map<String, String> map = new HashMap<>();
         SharedPreferences ad_info = MainBaseApplication.getApplication().getSharedPreferences(Contents.AD_INFO_SP, Context.MODE_PRIVATE);
         String ad = ad_info.getString(Contents.AD_INFO, "");
-        if (!TextUtils.isEmpty(ad)) {
-            AdBean.DataBean dataBean = JSON.parseObject(ad, AdBean.DataBean.class);
+        AdBean.DataBean dataBean = JSON.parseObject(ad, AdBean.DataBean.class);
+        if (dataBean!=null) {
             //广告信息
             AdBean.DataBean.AdvertisementBean advertisement = dataBean.getAdvertisement();
             //穿山甲广告
-            String kTouTiaoAppKey = advertisement.getKTouTiaoAppKey();
-            String kTouTiaoKaiPing = advertisement.getKTouTiaoKaiPing();
-            String kTouTiaoBannerKey = advertisement.getKTouTiaoBannerKey();
-            String kTouTiaoChaPingKey = advertisement.getKTouTiaoChaPingKey();
-            String kTouTiaoJiLiKey = advertisement.getKTouTiaoJiLiKey();
-            String kTouTiaoSeniorKey = advertisement.getKTouTiaoSeniorKey();
-            map.put(Contents.KT_OUTIAO_APPKEY, kTouTiaoAppKey);
-            map.put(Contents.KT_OUTIAO_KAIPING, kTouTiaoKaiPing);
-            map.put(Contents.KT_OUTIAO_BANNERKEY, kTouTiaoBannerKey);
-            map.put(Contents.KT_OUTIAO_CHAPINGKEY, kTouTiaoChaPingKey);
-            map.put(Contents.KT_OUTIAO_JILIKEY, kTouTiaoJiLiKey);
-            map.put(Contents.KT_OUTIAO_SENIORKEY, kTouTiaoSeniorKey);
+//            String kTouTiaoAppKey = advertisement.getKTouTiaoAppKey();
+//            String kTouTiaoKaiPing = advertisement.getKTouTiaoKaiPing();
+//            String kTouTiaoBannerKey = advertisement.getKTouTiaoBannerKey();
+//            String kTouTiaoChaPingKey = advertisement.getKTouTiaoChaPingKey();
+//            String kTouTiaoJiLiKey = advertisement.getKTouTiaoJiLiKey();
+//            String kTouTiaoSeniorKey = advertisement.getKTouTiaoSeniorKey();
+//            map.put(Contents.KT_OUTIAO_APPKEY, kTouTiaoAppKey);
+//            map.put(Contents.KT_OUTIAO_KAIPING, kTouTiaoKaiPing);
+//            map.put(Contents.KT_OUTIAO_BANNERKEY, kTouTiaoBannerKey);
+//            map.put(Contents.KT_OUTIAO_CHAPINGKEY, kTouTiaoChaPingKey);
+//            map.put(Contents.KT_OUTIAO_JILIKEY, kTouTiaoJiLiKey);
+//            map.put(Contents.KT_OUTIAO_SENIORKEY, kTouTiaoSeniorKey);
+
+            map.put(Contents.KT_OUTIAO_APPKEY, advertisement.getKWaiAppKey());
+            map.put(Contents.KT_OUTIAO_KAIPING, advertisement.getKWaiKaiPing());
+            map.put(Contents.KT_OUTIAO_BANNERKEY, advertisement.getKWaiBannerKey());
+            map.put(Contents.KT_OUTIAO_CHAPINGKEY, advertisement.getKWaiChaPingKey());
+            map.put(Contents.KT_OUTIAO_JILIKEY, advertisement.getKWaiJiLiKey());
+            map.put(Contents.KT_OUTIAO_SENIORKEY, advertisement.getKWaiSeniorKey());
 
             //广点通广告
             String kgdtMobSDKAppKey = advertisement.getKGDTMobSDKAppKey();
@@ -75,8 +77,6 @@ public class SpUtil {
         }
         return null;
     }
-
-
     public static boolean isHaveAdData() {
         AdBean.DataBean dataBean =getAdState();
         Map<String, String> adKey = getADKey();
@@ -85,6 +85,5 @@ public class SpUtil {
         }
         return false;
     }
-
 
 }

@@ -51,7 +51,7 @@ import butterknife.BindView;
  * @time 2020/9/11 18:00
  * @class describe
  */
-public class FirstLocationActivity extends BaseMainActivity implements OnPickListener, AMapLocationListener, IAdCallback, IAddressCallback {
+public class FirstLocationActivity extends BaseMainActivity implements OnPickListener, AMapLocationListener, IAddressCallback {
 
     private GaoDeHelper mGaoDeHelper;
     private LocatedCity mLocatedCity;
@@ -59,7 +59,6 @@ public class FirstLocationActivity extends BaseMainActivity implements OnPickLis
     FrameLayout  mSplashContainer;
     private SplashHelper mSplashHelper;
     private String mCity;
-    private AdPresentImpl mAdPresent;
     private AddressPresentImpl mAddressPresent;
 
     @Override
@@ -84,9 +83,6 @@ public class FirstLocationActivity extends BaseMainActivity implements OnPickLis
 
     @Override
     protected void intPresent() {
-        mAdPresent = AdPresentImpl.getInstance();
-        mAdPresent.registerCallback(this);
-
         mAddressPresent = PresentManager.getInstance().getAddressPresent();
         mAddressPresent.registerCallback(this);
 
@@ -109,9 +105,6 @@ public class FirstLocationActivity extends BaseMainActivity implements OnPickLis
                 mSplashHelper.showAd();
             }
         }else {
-            if (mAdPresent != null) {
-                mAdPresent.toRequestAd();
-            }
         }
         SpUtils.getInstance().putBoolean(Contents.IS_FIRST, false).commit();
         SpUtils.getInstance().putBoolean(Contents.FIRST_LOCATION, true).commit();
@@ -201,17 +194,6 @@ public class FirstLocationActivity extends BaseMainActivity implements OnPickLis
         }
     }
 
-    @Override
-    public void onLoadAdMsgSuccess(AdBean adBean) {
-        if (adBean != null) {
-            AdBean.DataBean data = adBean.getData();
-            String ad = JSON.toJSONString(data);
-            BaseApplication.getAppContext().getSharedPreferences(Contents.AD_INFO_SP, Context.MODE_PRIVATE).edit().putString(Contents.AD_INFO, ad).apply();
-            mSplashHelper.showAd();
-
-        }
-    }
-
 
     @Override
     public void onLoadAddressSuccess(LocationBean addressBean) {
@@ -220,12 +202,6 @@ public class FirstLocationActivity extends BaseMainActivity implements OnPickLis
                 .putString(Contents.CURRENT_LONG, addressBean.getLongitude() + "")
                 .putString(Contents.CURRENT_LAT,addressBean.getLatitude()+"")
                 .commit();
-    }
-
-
-    @Override
-    public void onLoadAdMsgError() {
-
     }
 
     @Override

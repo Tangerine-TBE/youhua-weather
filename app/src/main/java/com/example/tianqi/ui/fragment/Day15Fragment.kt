@@ -1,5 +1,6 @@
 package com.example.tianqi.ui.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -67,9 +68,11 @@ class Day15Fragment:Fragment(), IHuangLiCallback {
      fun intView() {
 
         position = arguments!!.getInt(Contents.CURRENT_POSITION)
-          mBanFeedHelper = BanFeedHelper(activity, banner_container, feed_container)
-         mBanFeedHelper?.showAd(BanFeedHelper.AdType.AIRQUALITY_PAGE)
-
+         val activity=requireContext()
+         if (activity is Activity) {
+             mBanFeedHelper = BanFeedHelper(activity, banner_container, feed_container)
+             mBanFeedHelper?.showAd(BanFeedHelper.AdType.AIRQUALITY_PAGE)
+         }
      }
     private var mHuangLiPresent:HuangLiPresentImpl?=null
     fun intPresent() {
