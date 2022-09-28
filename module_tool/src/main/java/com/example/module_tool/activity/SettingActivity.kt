@@ -1,7 +1,7 @@
 package com.example.module_tool.activity
 
 
-import com.amap.api.maps.model.MyLocationStyle
+//import com.amap.api.maps.model.MyLocationStyle
 import com.example.module_ad.utils.MyStatusBarUtil
 import com.example.module_tool.R
 import com.example.module_tool.base.BaseActivity

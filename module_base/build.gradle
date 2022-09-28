@@ -32,9 +32,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     api rootProject.ext.dependencies["RxTool"]
     api rootProject.ext.dependencies["fastjson"]
-    api  'com.umeng.umsdk:common:9.3.8'// 必选
-    api  'com.umeng.umsdk:asms:1.2.2'// 必选
-    api 'com.umeng.umsdk:apm:1.2.0'
+    api  'com.umeng.umsdk:common:9.5.2'// 必选
+    api  'com.umeng.umsdk:asms:1.6.3'// 必选
+    api 'com.umeng.umsdk:apm:1.7.0'
     // 错误分析升级为独立产品U-APM可按需集成，
     api "com.github.bumptech.glide:glide:4.11.0"
 }

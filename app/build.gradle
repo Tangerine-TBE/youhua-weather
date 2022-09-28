@@ -11,8 +11,8 @@ android {
         applicationId "com.youhua.zhongyangtianqi"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 25
-        versionName "2.4"
+        versionCode 26
+        versionName "2.5"
         flavorDimensions "versionCode"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -52,6 +52,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -70,7 +71,7 @@ android {
 
     //    只在打包提测时改apk文件名，开发时记得注释掉
 //    applicationVariants.all { variant ->
-//               variant.getPackageApplication().outputDirectory = new File("F:/安装包/深圳市优话网络科技有限公司/优化中央天气预报/优化中央天气预报2.4")
+//               variant.getPackageApplication().outputDirectory = new File("E:/安装包/深圳市优话网络科技有限公司/优化中央天气预报/优化中央天气预报2.5")
 //              variant.outputs.all {
 //                    outputFileName = "${variant.productFlavors[0].manifestPlaceholders.get("app_name_channel")}" +
 //                          "_${variant.productFlavors[0].name}" +
@@ -85,45 +86,45 @@ android {
     气象天气预报：oppo  VIVO*/
 
     productFlavors {
-        _321 {
-            manifestPlaceholders = [
-                    app_name_channel: "天气-优话",
-                    CHANNEL_VALUE:"_321"]
-        }
-        _anzhi {
-            manifestPlaceholders = [
-                    app_name_channel: "天气预报",
-                    CHANNEL_VALUE:"_anzhi"]
-        }
-        _lenovo {
-            manifestPlaceholders = [
-                    app_name_channel: "天气预报",
-                    CHANNEL_VALUE:"_lenovo"]
-        }
+//        _321 {
+//            manifestPlaceholders = [
+//                    app_name_channel: "天气-优话",
+//                    CHANNEL_VALUE:"_321"]
+//        }
+//        _anzhi {
+//            manifestPlaceholders = [
+//                    app_name_channel: "天气预报",
+//                    CHANNEL_VALUE:"_anzhi"]
+//        }
+//        _lenovo {
+//            manifestPlaceholders = [
+//                    app_name_channel: "天气预报",
+//                    CHANNEL_VALUE:"_lenovo"]
+//        }
         _oppo {
 
             manifestPlaceholders = [
                     app_name_channel: "气象天气预报",
                     CHANNEL_VALUE:"_oppo"]
         }
-        _vivo {
-
-            manifestPlaceholders = [
-                    app_name_channel: "准时天气预报",
-                    CHANNEL_VALUE:"_vivo"]
-        }
-        _360 {
-
-            
-            manifestPlaceholders = [
-                    app_name_channel: "天气预报",
-                    CHANNEL_VALUE:"_360"]
-        }
+//        _vivo {
+//
+//            manifestPlaceholders = [
+//                    app_name_channel: "准时天气预报",
+//                    CHANNEL_VALUE:"_vivo"]
+//        }
+//        _360 {
+//
+//
+//            manifestPlaceholders = [
+//                    app_name_channel: "天气预报",
+//                    CHANNEL_VALUE:"_360"]
+//        }
         _xiaomi {
 
             
             manifestPlaceholders = [
-                    app_name_channel: "中央天气预报",
+                    app_name_channel: "优话天气预报",
                     CHANNEL_VALUE:"_xiaomi"]
         }
         _yingyongbao {
@@ -133,34 +134,34 @@ android {
                     app_name_channel: "中央天气预报",
                     CHANNEL_VALUE:"_yingyongbao"]
         }
-        _baidu {
-
-            
-            manifestPlaceholders = [
-                    app_name_channel: "天气预报",
-                    CHANNEL_VALUE:"_baidu"]
-        }
-        _huawei {
-
-            
-            manifestPlaceholders = [
-                    app_name_channel: "天气预报",
-                    CHANNEL_VALUE:"_huawei"]
-        }
-        _meizu {
-
-            
-            manifestPlaceholders = [
-                    app_name_channel: "天气预报",
-                    CHANNEL_VALUE:"_meizu"]
-        }
-        _alibaba {
-
-            
-            manifestPlaceholders = [
-                    app_name_channel: "天气预报",
-                    CHANNEL_VALUE:"_alibaba"]
-        }
+//        _baidu {
+//
+//
+//            manifestPlaceholders = [
+//                    app_name_channel: "天气预报",
+//                    CHANNEL_VALUE:"_baidu"]
+//        }
+//        _huawei {
+//
+//
+//            manifestPlaceholders = [
+//                    app_name_channel: "天气预报",
+//                    CHANNEL_VALUE:"_huawei"]
+//        }
+//        _meizu {
+//
+//
+//            manifestPlaceholders = [
+//                    app_name_channel: "天气预报",
+//                    CHANNEL_VALUE:"_meizu"]
+//        }
+//        _alibaba {
+//
+//
+//            manifestPlaceholders = [
+//                    app_name_channel: "天气预报",
+//                    CHANNEL_VALUE:"_alibaba"]
+//        }
     }
 }
 

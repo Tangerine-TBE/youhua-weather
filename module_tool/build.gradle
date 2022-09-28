@@ -62,7 +62,8 @@ dependencies {
 
     //高德地图
     api 'com.amap.api:location:latest.integration'
-    api 'com.amap.api:3dmap:latest.integration'
+//    api 'com.amap.api:3dmap:latest.integration'
+    api 'com.amap.api:3dmap:9.2.1'
 
 
     implementation project(path: ':module_base')
